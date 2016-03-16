@@ -16,7 +16,7 @@ public class ReteSociale
 
 		if (already_in)
 		{
-			throw new UserException ("elemento già presente");
+			throw new UserException ("elemento "+u+" già presente");
 		}
 		else
 		{
@@ -105,18 +105,19 @@ public class ReteSociale
 		Vector<Integer> amici_di_a = this.contatti.get(posizione_a);
 		Vector<Integer> amici_di_b = this.contatti.get(posizione_b);
 		
-		if (amici_di_a.contains(posizione_b))
+		if (!amici_di_a.contains(posizione_b))
 		{
 			throw new RelationException ("");
 		}
 		
-		if (amici_di_b.contains(posizione_a))
+		if (!amici_di_b.contains(posizione_a))
 		{
 			throw new RelationException ("");
 		}
 		
-		amici_di_a.remove(posizione_b);
-		amici_di_b.remove(posizione_a);
+		
+		amici_di_a.remove((Integer)posizione_b);
+		amici_di_b.remove((Integer)posizione_a);
 		
 	}
 	
@@ -138,15 +139,15 @@ public class ReteSociale
 		Vector<Integer> amici_di_a = this.contatti.get(posizione_a);
 		Vector<Integer> amici_di_b = this.contatti.get(posizione_b);
 		
-		if (amici_di_a.contains(posizione_b))
+	/*	if (!amici_di_a.contains(posizione_b))
 		{
 			throw new RelationException ("");
 		}
 		
-		if (amici_di_b.contains(posizione_a))
+		if (!amici_di_b.contains(posizione_a))
 		{
 			throw new RelationException ("");
-		}
+		}*/
 		
 		for (Integer i : amici_di_b)
 		{
@@ -167,45 +168,66 @@ public class ReteSociale
 	{
 		int posizione_a = this.lista_utenti.indexOf(a);
 		Set<Integer> id_amici;
-		
-		
+				
 		if (posizione_a < 0) 
 		{
 			throw new UserException ("Utente "+a+" non trovato");
 		}
 		
-		id_amici=this.getRelations_recursive (posizione_a, d, new HashSet<Integer>());
+		
+		id_amici=this.getRelations_bfs (posizione_a, d);
 		
 		return this.converti(id_amici);
 		
 		
 	}
 	
-	private Set<Integer> getRelations_recursive (int a, int d, Set<Integer> nodi_visitati)
+	private Set<Integer> getRelations_bfs (int a, int d)
 	{
 		
-		
 		Set<Integer> ret = new HashSet<Integer>();
-		if (d<=0)
+		
+		LinkedList<Integer> lista_amici = new LinkedList<Integer>();
+		LinkedList<Integer> lista_distanze = new LinkedList<Integer>();
+		
+		LinkedList<Integer> nodi_visitati = new LinkedList<Integer>();
+		
+		lista_amici.add(a);
+		lista_distanze.add(0);
+		
+		int u;
+		int k = 0;		
+		
+		while (!lista_amici.isEmpty() && k<d)
 		{
-			ret.add(a);
-		}
-		else
-		{
-			Vector<Integer> amici_di_a = this.contatti.get(a);
-			nodi_visitati.add(a);
-			for (Integer i: amici_di_a)
+			
+			u = lista_amici.removeFirst();
+			nodi_visitati.add(u);
+			k = lista_distanze.removeFirst();
+			//~ System.out.println("Utente: "+u+" Distanza: "+k);
+
+			Vector<Integer> vicini = this.contatti.get(u);
+			for (Integer v: vicini)
 			{
-				if (!nodi_visitati.contains(i))
+				if (!nodi_visitati.contains(v))
 				{
-					ret.addAll(getRelations_recursive(a, d-1, nodi_visitati));
+					lista_amici.add(v);
+					lista_distanze.add(k+1);
 				}
 			}
-			nodi_visitati.remove(a);
 			
+			//~ System.out.println(lista_amici);
+			if (!lista_amici.isEmpty())
+			{
+				k=lista_distanze.get(0);
+			}
 			
 		}
+		
+		ret.addAll(lista_amici);
+		
 		return ret;
+
 	}
 	
 	
@@ -220,5 +242,20 @@ public class ReteSociale
 		}
 		
 		return ret;
+	}
+	
+	public String toString()
+	{
+		String s="";
+		int i=0;
+		for (Utente u : this.lista_utenti)
+		{
+			s+= i + " " + u+"\n";
+			i+=1;
+		}
+		
+		s+=this.contatti;
+		return s;
+		
 	}
 }
