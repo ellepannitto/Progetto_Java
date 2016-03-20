@@ -1,0 +1,66 @@
+import java.util.*;
+
+public class Utente
+{
+	private static int next_id = 0;
+	
+	private final int id;
+	private String nome;
+	private String cognome;
+	private Date data_di_nascita;
+	
+	public Utente (String nome, String cognome, Date data_di_nascita)
+	{
+		this.nome=nome;
+		this.cognome=cognome;
+		this.data_di_nascita=data_di_nascita;
+		this.id = next_id;
+		next_id++;
+	}
+	
+	public Utente (String nome, String cognome)
+	{
+		this.nome=nome;
+		this.cognome=cognome;
+
+		this.id = next_id;
+		next_id++;
+	}
+	
+	public String toString ()
+	{
+		return "("+this.id+") "+this.nome+" "+this.cognome;
+	}
+	
+	public int hashCode ()
+	{
+		return this.id;
+	}
+	
+	public boolean equals (Object o)
+	{
+		boolean ret=false;
+	
+		if (o != null && o instanceof Utente)
+		{			
+			if (this.id == ((Utente)o).getId())
+			{
+				ret=true;
+			}
+		}else if (o instanceof Integer)
+		{
+			if ((Integer)o == this.id)
+			{
+				ret=true;
+			}
+		}
+		
+		return ret;
+	}
+	
+	public int getId()
+	{
+		return this.id;
+	}
+	
+}

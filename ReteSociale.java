@@ -4,15 +4,13 @@ public class ReteSociale
 {
 
 
-	private Vector<Utente> lista_utenti = new Vector<Utente>();
+	private Map<Integer, Utente> mappa_utenti = new HashMap<Integer, Utente>();
 	private Map<Integer, Vector<Integer>> contatti = new HashMap<Integer, Vector<Integer>>(); 
 	
 	
 	public int addUser(Utente u) throws UserException
 	{
-		int posizione;
-
-		boolean already_in = this.lista_utenti.contains(u);
+		boolean already_in = this.mappa_utenti.containsKey(u.getId());
 
 		if (already_in)
 		{
@@ -20,12 +18,46 @@ public class ReteSociale
 		}
 		else
 		{
-			this.lista_utenti.addElement(u);
-			posizione = this.lista_utenti.size()-1;
-			this.contatti.put(posizione, new Vector<Integer>());
+			this.mappa_utenti.put(u.getId(), u);
+			this.contatti.put(u.getId(), new Vector<Integer>());
 			
 		}
-		return posizione;
+		
+		return u.getId();
+	}
+	
+	public void removeUser (Utente u) throws UserException
+	{
+		boolean already_in = this.mappa_utenti.containsKey(u.getId());
+
+		if (!already_in)
+		{
+			throw new UserException ("elemento "+u+" già presente");
+		}
+		else
+		{
+			Vector<Integer> lista_amici=this.contatti.get(u.getId());
+			
+			Vector<Integer> copia_lista_amici = new Vector<Integer> (lista_amici);
+			
+			
+			for (Integer i: copia_lista_amici)
+			{
+				try
+				{
+					this.removeRelation(this.mappa_utenti.get(i), u);
+				}
+				catch (RelationException e)
+				{
+					;
+				}
+			}
+			
+		}
+		
+		this.contatti.remove(u.getId());
+		this.mappa_utenti.remove(u.getId());
+		
 	}
 	
 	/**
@@ -41,34 +73,34 @@ public class ReteSociale
 	 * */
 	public void changeRelation (Utente a, Utente b) throws UserException, RelationException
 	{
-		int posizione_a = this.lista_utenti.indexOf(a);
-		int posizione_b = this.lista_utenti.indexOf(b);
-		
-		if (posizione_a < 0) 
+		boolean a_already_in = this.mappa_utenti.containsKey(a.getId());
+		boolean b_already_in = this.mappa_utenti.containsKey(b.getId());
+			
+		if (!a_already_in) 
 		{
 			throw new UserException ("Utente "+a+" non trovato");
 		}
 		
-		if (posizione_b < 0 )
+		if (!b_already_in )
 		{
 			throw new UserException ("Utente "+b+" non trovato");
 		}
 		
-		Vector<Integer> amici_di_a = this.contatti.get(posizione_a);
-		Vector<Integer> amici_di_b = this.contatti.get(posizione_b);
+		Vector<Integer> amici_di_a = this.contatti.get(a.getId());
+		Vector<Integer> amici_di_b = this.contatti.get(b.getId());
 		
-		if (amici_di_a.contains(posizione_b))
+		if (amici_di_a.contains(b.getId()))
 		{
 			throw new RelationException ("");
 		}
 		
-		if (amici_di_b.contains(posizione_a))
+		if (amici_di_b.contains(a.getId()))
 		{
 			throw new RelationException ("");
 		}
 		
-		amici_di_a.addElement(posizione_b);
-		amici_di_b.addElement(posizione_a);
+		amici_di_a.addElement(b.getId());
+		amici_di_b.addElement(a.getId());
 		
 	}
 	
@@ -89,71 +121,72 @@ public class ReteSociale
 	
 	public void removeRelation (Utente a, Utente b) throws UserException, RelationException
 	{
-		int posizione_a = this.lista_utenti.indexOf(a);
-		int posizione_b = this.lista_utenti.indexOf(b);
-		
-		if (posizione_a < 0) 
+		boolean a_already_in = this.mappa_utenti.containsKey(a.getId());
+		boolean b_already_in = this.mappa_utenti.containsKey(b.getId());
+			
+		if (!a_already_in) 
 		{
 			throw new UserException ("Utente "+a+" non trovato");
 		}
 		
-		if (posizione_b < 0 )
+		if (!b_already_in )
 		{
 			throw new UserException ("Utente "+b+" non trovato");
 		}
 		
-		Vector<Integer> amici_di_a = this.contatti.get(posizione_a);
-		Vector<Integer> amici_di_b = this.contatti.get(posizione_b);
 		
-		if (!amici_di_a.contains(posizione_b))
+		Vector<Integer> amici_di_a = this.contatti.get(a.getId());
+		Vector<Integer> amici_di_b = this.contatti.get(b.getId());
+		
+		if (!amici_di_a.contains(b.getId()))
 		{
 			throw new RelationException ("");
 		}
 		
-		if (!amici_di_b.contains(posizione_a))
+		if (!amici_di_b.contains(a.getId()))
 		{
 			throw new RelationException ("");
 		}
 		
 		
-		amici_di_a.remove((Integer)posizione_b);
-		amici_di_b.remove((Integer)posizione_a);
+		amici_di_a.remove((Integer)b.getId());
+		amici_di_b.remove((Integer)a.getId());
 		
 	}
 	
 	public void SuperRemove (Utente a, Utente b) throws UserException, RelationException
 	{
-		int posizione_a = this.lista_utenti.indexOf(a);
-		int posizione_b = this.lista_utenti.indexOf(b);
-		
-		if (posizione_a < 0) 
+		boolean a_already_in = this.mappa_utenti.containsKey(a.getId());
+		boolean b_already_in = this.mappa_utenti.containsKey(b.getId());
+			
+		if (!a_already_in) 
 		{
 			throw new UserException ("Utente "+a+" non trovato");
 		}
 		
-		if (posizione_b < 0 )
+		if (!b_already_in )
 		{
 			throw new UserException ("Utente "+b+" non trovato");
 		}
 		
-		Vector<Integer> amici_di_a = this.contatti.get(posizione_a);
-		Vector<Integer> amici_di_b = this.contatti.get(posizione_b);
-		
-	/*	if (!amici_di_a.contains(posizione_b))
+		Vector<Integer> amici_di_a = this.contatti.get(a.getId());
+		Vector<Integer> amici_di_b = this.contatti.get(b.getId());
+				
+		try
 		{
-			throw new RelationException ("");
+			this.removeRelation(a, b);
 		}
-		
-		if (!amici_di_b.contains(posizione_a))
+		catch (RelationException e)
 		{
-			throw new RelationException ("");
-		}*/
-		
+			;
+		}
+	
+	
 		for (Integer i : amici_di_b)
 		{
 			try
 			{
-				Utente u=this.lista_utenti.get(i);
+				Utente u=this.mappa_utenti.get(i);
 				this.removeRelation(a, u);
 			}
 			catch (RelationException e)
@@ -166,16 +199,16 @@ public class ReteSociale
 	
 	public Set<Utente> getRelations (Utente a, int d) throws UserException
 	{
-		int posizione_a = this.lista_utenti.indexOf(a);
+		boolean a_already_in = this.mappa_utenti.containsKey(a.getId());
 		Set<Integer> id_amici;
 				
-		if (posizione_a < 0) 
+		if (!a_already_in) 
 		{
 			throw new UserException ("Utente "+a+" non trovato");
 		}
 		
 		
-		id_amici=this.getRelations_bfs (posizione_a, d);
+		id_amici=this.getRelations_bfs (a.getId(), d);
 		
 		return this.converti(id_amici);
 		
@@ -237,7 +270,7 @@ public class ReteSociale
 		
 		for (Integer i: lista)
 		{
-			Utente u= this.lista_utenti.get(i);
+			Utente u= this.mappa_utenti.get(i);
 			ret.add(u);
 		}
 		
@@ -247,11 +280,9 @@ public class ReteSociale
 	public String toString()
 	{
 		String s="";
-		int i=0;
-		for (Utente u : this.lista_utenti)
+		for (Map.Entry<Integer, Utente> pair : this.mappa_utenti.entrySet())
 		{
-			s+= i + " " + u+"\n";
-			i+=1;
+			s+= pair.getKey() + " " + pair.getValue() + "\n";
 		}
 		
 		s+=this.contatti;
