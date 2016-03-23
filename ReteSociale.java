@@ -1,16 +1,86 @@
+import java.io.*;
 import java.util.*;
+import java.util.Map.Entry;
 
 public class ReteSociale
 {
 
 
-	private Map<Integer, Utente> mappa_utenti = new HashMap<Integer, Utente>();
-	private Map<Integer, Vector<Integer>> contatti = new HashMap<Integer, Vector<Integer>>(); 
+	private Map<Integer, Utente> persone = new HashMap<Integer, Utente>();
+	private Map<Integer, Vector<Integer>> rete = new HashMap<Integer, Vector<Integer>>(); 
+	
+	private boolean modifiche = false;
+	private String nomeFileRete = "";
+	private String nomeFileUtenti = "";
+	
+	public ReteSociale() {
+		rete = new HashMap<Integer, Vector<Integer>>(); 
+		persone = new HashMap<Integer, Utente>();
+	}
+	
+	public ReteSociale (String rete_file, String utenti_file){
+
+		try {
+			this.nomeFileRete = rete_file;
+			ObjectInputStream file_input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(rete_file)));
+			rete = (HashMap<Integer, Vector<Integer>>) file_input.readObject();
+			file_input.close();
+			this.nomeFileUtenti = utenti_file;
+			file_input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(utenti_file)));
+			persone = (HashMap<Integer, Utente>) file_input.readObject();
+			file_input.close();
+		} catch (FileNotFoundException e) {
+			// gestisce il caso in cui il file non sia presente (sarà creato poi...)
+			System.out.println("ATTENZIONE: Il file non esiste");
+			System.out.println("Sara' creato al primo salvataggio");
+			System.out.println();
+			rete = new HashMap<Integer, Vector<Integer>>(); 
+			persone = new HashMap<Integer, Utente>();
+		} catch (ClassNotFoundException e) {
+			// gestisce il caso in cui il file non contenga un oggetto
+			System.out.println("ERRORE di lettura");
+			System.out.println(e);
+		} catch (IOException e) {
+			// gestisce altri errori di input/output
+			System.out.println("ERRORE di I/O");
+			System.out.println(e);
+		}
+	}
+	
+	/**
+	 * Stampa l'hashmap della rete sociale
+	 * 
+	 * @return String
+	 */
+	public String toString()
+	{
+		String output = "";
+		// Costruisce l'iteratore con il metodo dedicato
+		Iterator<Entry<Integer, Vector<Integer>>> it = rete.entrySet().iterator();
+		 
+		// Verifica con il metodo hasNext() che nella hashmap
+		// ci siano altri elementi su cui ciclare
+		while (it.hasNext()) {
+		    // Utilizza il nuovo elemento (coppia chiave-valore)
+		    // dell'hashmap
+		    Map.Entry entry = (Map.Entry)it.next();
+		    
+		    // Stampa a schermo la coppia chiave-valore;
+		    output = output + persone.get(entry.getKey()) + "   ";
+		    output = output + "Amici =";
+		    Vector<Integer> amici = (Vector) entry.getValue();
+		    for (int i : amici) {
+		    	output = output + " " +persone.get(i);
+		    }
+		    output = output + "\n";
+		}
+		return output;	
+	}
 	
 	
 	public int addUser(Utente u) throws UserException
 	{
-		boolean already_in = this.mappa_utenti.containsKey(u.getId());
+		boolean already_in = this.persone.containsKey(u.getId());
 
 		if (already_in)
 		{
@@ -18,8 +88,8 @@ public class ReteSociale
 		}
 		else
 		{
-			this.mappa_utenti.put(u.getId(), u);
-			this.contatti.put(u.getId(), new Vector<Integer>());
+			this.persone.put(u.getId(), u);
+			this.rete.put(u.getId(), new Vector<Integer>());
 			
 		}
 		
@@ -28,7 +98,7 @@ public class ReteSociale
 	
 	public void removeUser (Utente u) throws UserException
 	{
-		boolean already_in = this.mappa_utenti.containsKey(u.getId());
+		boolean already_in = this.persone.containsKey(u.getId());
 
 		if (!already_in)
 		{
@@ -36,7 +106,7 @@ public class ReteSociale
 		}
 		else
 		{
-			Vector<Integer> lista_amici=this.contatti.get(u.getId());
+			Vector<Integer> lista_amici=this.rete.get(u.getId());
 			
 			Vector<Integer> copia_lista_amici = new Vector<Integer> (lista_amici);
 			
@@ -45,7 +115,7 @@ public class ReteSociale
 			{
 				try
 				{
-					this.removeRelation(this.mappa_utenti.get(i), u);
+					this.removeRelation(this.persone.get(i), u);
 				}
 				catch (RelationException e)
 				{
@@ -55,8 +125,8 @@ public class ReteSociale
 			
 		}
 		
-		this.contatti.remove(u.getId());
-		this.mappa_utenti.remove(u.getId());
+		this.rete.remove(u.getId());
+		this.persone.remove(u.getId());
 		
 	}
 	
@@ -73,8 +143,8 @@ public class ReteSociale
 	 * */
 	public void changeRelation (Utente a, Utente b) throws UserException, RelationException
 	{
-		boolean a_already_in = this.mappa_utenti.containsKey(a.getId());
-		boolean b_already_in = this.mappa_utenti.containsKey(b.getId());
+		boolean a_already_in = this.persone.containsKey(a.getId());
+		boolean b_already_in = this.persone.containsKey(b.getId());
 			
 		if (!a_already_in) 
 		{
@@ -86,8 +156,8 @@ public class ReteSociale
 			throw new UserException ("Utente "+b+" non trovato");
 		}
 		
-		Vector<Integer> amici_di_a = this.contatti.get(a.getId());
-		Vector<Integer> amici_di_b = this.contatti.get(b.getId());
+		Vector<Integer> amici_di_a = this.rete.get(a.getId());
+		Vector<Integer> amici_di_b = this.rete.get(b.getId());
 		
 		if (amici_di_a.contains(b.getId()))
 		{
@@ -121,8 +191,8 @@ public class ReteSociale
 	
 	public void removeRelation (Utente a, Utente b) throws UserException, RelationException
 	{
-		boolean a_already_in = this.mappa_utenti.containsKey(a.getId());
-		boolean b_already_in = this.mappa_utenti.containsKey(b.getId());
+		boolean a_already_in = this.persone.containsKey(a.getId());
+		boolean b_already_in = this.persone.containsKey(b.getId());
 			
 		if (!a_already_in) 
 		{
@@ -135,8 +205,8 @@ public class ReteSociale
 		}
 		
 		
-		Vector<Integer> amici_di_a = this.contatti.get(a.getId());
-		Vector<Integer> amici_di_b = this.contatti.get(b.getId());
+		Vector<Integer> amici_di_a = this.rete.get(a.getId());
+		Vector<Integer> amici_di_b = this.rete.get(b.getId());
 		
 		if (!amici_di_a.contains(b.getId()))
 		{
@@ -156,8 +226,8 @@ public class ReteSociale
 	
 	public void SuperRemove (Utente a, Utente b) throws UserException, RelationException
 	{
-		boolean a_already_in = this.mappa_utenti.containsKey(a.getId());
-		boolean b_already_in = this.mappa_utenti.containsKey(b.getId());
+		boolean a_already_in = this.persone.containsKey(a.getId());
+		boolean b_already_in = this.persone.containsKey(b.getId());
 			
 		if (!a_already_in) 
 		{
@@ -169,8 +239,8 @@ public class ReteSociale
 			throw new UserException ("Utente "+b+" non trovato");
 		}
 		
-		Vector<Integer> amici_di_a = this.contatti.get(a.getId());
-		Vector<Integer> amici_di_b = this.contatti.get(b.getId());
+		Vector<Integer> amici_di_a = this.rete.get(a.getId());
+		Vector<Integer> amici_di_b = this.rete.get(b.getId());
 				
 		try
 		{
@@ -186,7 +256,7 @@ public class ReteSociale
 		{
 			try
 			{
-				Utente u=this.mappa_utenti.get(i);
+				Utente u=this.persone.get(i);
 				this.removeRelation(a, u);
 			}
 			catch (RelationException e)
@@ -199,7 +269,7 @@ public class ReteSociale
 	
 	public Set<Utente> getRelations (Utente a, int d) throws UserException
 	{
-		boolean a_already_in = this.mappa_utenti.containsKey(a.getId());
+		boolean a_already_in = this.persone.containsKey(a.getId());
 		Set<Integer> id_amici;
 				
 		if (!a_already_in) 
@@ -239,7 +309,7 @@ public class ReteSociale
 			k = lista_distanze.removeFirst();
 			//~ System.out.println("Utente: "+u+" Distanza: "+k);
 
-			Vector<Integer> vicini = this.contatti.get(u);
+			Vector<Integer> vicini = this.rete.get(u);
 			for (Integer v: vicini)
 			{
 				if (!nodi_visitati.contains(v))
@@ -270,23 +340,80 @@ public class ReteSociale
 		
 		for (Integer i: lista)
 		{
-			Utente u= this.mappa_utenti.get(i);
+			Utente u= this.persone.get(i);
 			ret.add(u);
 		}
 		
 		return ret;
 	}
 	
-	public String toString()
+	public int getNodi () {
+			return rete.size();
+		}
+		
+		// Restituisce la distribuzione di probabilità per il grado k di un nodo nella rete
+		public double getDegreeDistribution (int k) {
+			int Nk = 0;
+			Iterator<Integer> keySetIterator = rete.keySet().iterator();
+			while (keySetIterator.hasNext()) {
+			            Integer key1 = keySetIterator.next();
+			            //System.out.println("key: " + key1 + " value: " + map.get(key1));
+			            if (rete.get(key1).size() == k)
+			            	Nk++;			            
+			}
+			return Nk / getNodi();
+		}
+
+	// Average degree = 2L/N (L=num archi, N = num nodi)
+	
+		/**
+		 * Lmax indica il numero massimo di link che una rete di N nodi può avere 
+		 * @return double con il valore di Lmax
+		 */
+		public double Lmax () {
+			int N = getNodi();
+			return (N*(N-1))/2;
+		}
+	// Diametro: il cammino più lungo possibile
+	// Average distance = (1/Lmax)* S_d<i,j>
+	// Clustering coefficient = 
+	
+	/** Salva il registro nel file restituisce true se il salvataggio è andato a buon fine
+	 * 
+	 * @return
+	 */
+		public boolean salva() {
+			if (modifiche) { // salva solo se necessario (se ci sono modifiche)
+				
+				try {
+					ObjectOutputStream file_output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFileRete)));
+					// salva l'intero oggetto nel file
+					file_output.writeObject(rete);
+					file_output.close();
+					file_output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFileUtenti)));
+					// salva l'intero oggetto nel file
+					file_output.writeObject(persone);
+					file_output.close();
+					modifiche = false; // le modifiche sono state salvate
+					return true;
+				} catch (IOException e) {
+					System.out.println("ERRORE di I/O");
+					System.out.println(e);
+					return false;
+				}		
+			} else return true;
+		}
+	
+	/*public String toString()
 	{
 		String s="";
-		for (Map.Entry<Integer, Utente> pair : this.mappa_utenti.entrySet())
+		for (Map.Entry<Integer, Utente> pair : this.persone.entrySet())
 		{
 			s+= pair.getKey() + " " + pair.getValue() + "\n";
 		}
 		
-		s+=this.contatti;
+		s+=this.rete;
 		return s;
 		
-	}
+	}*/
 }

@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class Utente
+public class Utente implements Serializable
 {
 	private static int next_id = 0;
 	
