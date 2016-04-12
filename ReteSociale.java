@@ -78,10 +78,16 @@ public class ReteSociale
 		return output;	
 	}
 	
-	public Utente getUser (int id)
+	public Utente getUser (int id) throws UserException
 	{
-		Utente u=this.persone.get(id);
-		return u;
+		boolean already_in = this.persone.containsKey(id);
+		if (already_in)
+		{
+			Utente u=this.persone.get(id);
+			return u;
+		}else{
+			throw new UserException("id "+id+" non presente nella rete sociale");
+		}
 	}
 	
 	public int addUser(Utente u) throws UserException
@@ -389,8 +395,8 @@ public class ReteSociale
 	 * @return
 	 */
 		public boolean salva() {
-			if (modifiche) { // salva solo se necessario (se ci sono modifiche)
-				
+			System.out.println(nomeFileRete);
+			//if (modifiche) { // salva solo se necessario (se ci sono modifiche)				
 				try {
 					ObjectOutputStream file_output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFileRete)));
 					// salva l'intero oggetto nel file
@@ -406,8 +412,16 @@ public class ReteSociale
 					System.out.println("ERRORE di I/O");
 					System.out.println(e);
 					return false;
-				}		
-			} else return true;
+				}	
+			//} else return true;
+		}
+		
+		public boolean salva(String file_rete, String file_utenti)
+		{
+			this.nomeFileRete = file_rete;
+			this.nomeFileUtenti = file_utenti;
+			
+			return this.salva();
 		}
 	
 	/*public String toString()

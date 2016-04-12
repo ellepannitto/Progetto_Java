@@ -32,18 +32,24 @@ public class Interface
 		System.out.println("Inserisci l'id dell'utente da rimuovere");
 		int id_utente=input.nextInt ();
 		
-		Utente utente_da_rimuovere=rete.getUser(id_utente);
-		
-		System.out.println(utente_da_rimuovere);
-		
 		try
 		{
-			rete.removeUser(utente_da_rimuovere);
+			Utente utente_da_rimuovere=rete.getUser(id_utente);
+			
+			System.out.println(utente_da_rimuovere);
+			
+			try
+			{
+				rete.removeUser(utente_da_rimuovere);
+			}
+			catch (UserException e)
+			{ 
+			;
+			}
 		}
 		catch (UserException e)
-		{ 
-			//System.out.println("Utente inesistente");//
-			
+		{
+			System.out.println(e);
 		}
 		
 	}
@@ -55,74 +61,117 @@ public class Interface
 		int id_utenteUno=input.nextInt ();
 		System.out.println("Seleziona il secondo utente");
 		int id_utenteDue=input.nextInt ();
+		Utente utenteUno;
+		Utente utenteDue;
 		
-		Utente utenteUno=rete.getUser(id_utenteUno);
-		Utente utenteDue=rete.getUser(id_utenteDue);
-		
-		System.out.println("Seleziona 0 per aggiungere la relazione\n 1 per rimuovere una relazione");
-		int scelta=input.nextInt ();
-		if (scelta==0)
+		try
 		{
-			try{
-				 rete.changeRelation(utenteUno, utenteDue);
-			}
-			catch (UserException e)
+			utenteUno=rete.getUser(id_utenteUno);
+			utenteDue=rete.getUser(id_utenteDue);
+		
+		
+			System.out.println("Seleziona 0 per aggiungere la relazione\n 1 per rimuovere una relazione");
+			int scelta=input.nextInt ();
+			if (scelta==0)
 			{
-				;
+				try{
+					 rete.changeRelation(utenteUno, utenteDue);
+				}
+				catch (UserException e)
+				{
+					;
+				}
+				catch ( RelationException e)
+				{
+					;
+				}
+			} 
+			else {
+				try{
+					 rete.changeRelation(utenteUno, utenteDue, false);
+				}
+				catch (UserException e)
+				{
+					;
+				}
+				catch ( RelationException e)
+				{
+					;
+				}
 			}
-			catch ( RelationException e)
-			{
-				;
-			}
-		} 
-		else {
-			try{
-				 rete.changeRelation(utenteUno, utenteDue, false);
-			}
-			catch (UserException e)
-			{
-				;
-			}
-			catch ( RelationException e)
-			{
-				;
-			}
-	}
+		}
+		catch (UserException e)
+		{
+			;
+		}
   }
+  
+	public static void salva(Scanner input, ReteSociale rete)
+	{
+		System.out.println("Vuoi salvare la tua rete? 1=sì, 0=no");
+		int scelta= input.nextInt();
+		
+		if (scelta==1)
+		{
+			System.out.println("inserisci il nome del file su cui salvare la rete sociale");
+			String file_rete = input.next();
+			System.out.println("inserisci il nome del file su cui salvare gli utenti della rete");
+			String file_utenti = input.next();
+			rete.salva(file_rete, file_utenti);
+		}
+	}
 	
 	public static void main(String[] args) 
 	{
-		
-		ReteSociale mia_rete=new ReteSociale();
 		Scanner input=new Scanner(System.in);
+		ReteSociale mia_rete;
+		
+		System.out.println("vuoi caricare una rete da file (1) o crearne una nuova(0)? ");
+		int selezione = input.nextInt();
+		if (selezione == 1) {
+			System.out.println("inserisci il nome del file da cui caricare la rete sociale");
+			String file_rete = input.next();
+			System.out.println("inserisci il nome del file da cui caricare gli utenti della rete");
+			String file_utenti = input.next();
+			mia_rete = new ReteSociale(file_rete, file_utenti);
+		}
+		else {
+			mia_rete=new ReteSociale();
+		}
+		
 		boolean condizione=true;
 		
-		System.out.println("Cosa vuoi fare? Rispondi:\n - 1 per inserire un nuovo utente\n - 2 per rimuovere un utente\n - 3 aggiungere o rimuovere una relazione di amicizia\n - 4 per uscire");
-	
 		while (condizione)
-		{		
+		{
+			System.out.println("Cosa vuoi fare? Rispondi:\n - 1 per inserire un nuovo utente\n - 2 per rimuovere un utente\n - 3 aggiungere o rimuovere una relazione di amicizia\n - 4 per stampare la rete sociale\n - 5 per uscire");
 			
-		    int scelta=input.nextInt();
+			int scelta=input.nextInt();
 			
-			String risposta;
 
 			switch (scelta)
 			{
-				case 1: risposta="hai selezionato: inserire un nuovo utente"; 
+				case 1: System.out.println("hai selezionato: inserire un nuovo utente"); 
 						aggiungiUtente(input, mia_rete);
 						System.out.println(mia_rete);
 						break;
-				case 2: risposta="hai selezionato: rimuovere un utente"; 
+				case 2: System.out.println("hai selezionato: rimuovere un utente"); 
 						rimuoviUtente(input, mia_rete);
 						break;
-				case 3: risposta="hai selezionato: aggiungere o rimuovere una relazione di amicizia"; 
+				case 3: System.out.println("hai selezionato: aggiungere o rimuovere una relazione di amicizia"); 
 						modificaAmicizia(input, mia_rete);
 						break;
-				case 4: risposta= "Ciao ciao!"; condizione=false; break;
-				default: risposta="il numero da te selezionato non esiste"; 
+				case 4: System.out.println("hai selezionato: stampare rete sociale");
+						System.out.println(mia_rete);
+						break;
+				case 5: salva(input, mia_rete);
+						System.out.println("Ciao ciao!"); 
+						condizione=false; 
+						break;
+				default: System.out.println("il numero da te selezionato non esiste"); 
 			}
-
-			System.out.println(risposta);
+			
+			//System.out.println("\033[H\033[2J");
+			System.out.flush();
 		}
 
 	}
