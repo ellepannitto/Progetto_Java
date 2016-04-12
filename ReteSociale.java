@@ -13,6 +13,7 @@ public class ReteSociale
 	private String nomeFileRete = "";
 	private String nomeFileUtenti = "";
 	
+	
 	public ReteSociale() {
 		rete = new HashMap<Integer, Vector<Integer>>(); 
 		persone = new HashMap<Integer, Utente>();
@@ -77,6 +78,11 @@ public class ReteSociale
 		return output;	
 	}
 	
+	public Utente getUser (int id)
+	{
+		Utente u=this.persone.get(id);
+		return u;
+	}
 	
 	public int addUser(Utente u) throws UserException
 	{
