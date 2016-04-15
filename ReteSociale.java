@@ -26,6 +26,7 @@ public class ReteSociale
 			ObjectInputStream file_input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(rete_file)));
 			rete = (HashMap<Integer, Vector<Integer>>) file_input.readObject();
 			file_input.close();
+			
 			this.nomeFileUtenti = utenti_file;
 			file_input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(utenti_file)));
 			persone = (HashMap<Integer, Utente>) file_input.readObject();
@@ -75,8 +76,10 @@ public class ReteSociale
 		    }
 		    output = output + "\n";
 		}
+		//~ System.out.println(output);
 		return output;	
 	}
+	
 	
 	public Utente getUser (int id) throws UserException
 	{
@@ -359,22 +362,24 @@ public class ReteSociale
 		return ret;
 	}
 	
-	public int getNodi () {
+	public int getNodi () 
+	{
 			return rete.size();
-		}
+	}
 		
 		// Restituisce la distribuzione di probabilità per il grado k di un nodo nella rete
-		public double getDegreeDistribution (int k) {
-			int Nk = 0;
-			Iterator<Integer> keySetIterator = rete.keySet().iterator();
-			while (keySetIterator.hasNext()) {
-			            Integer key1 = keySetIterator.next();
-			            //System.out.println("key: " + key1 + " value: " + map.get(key1));
-			            if (rete.get(key1).size() == k)
-			            	Nk++;			            
-			}
-			return Nk / getNodi();
+	public double getDegreeDistribution (int k) 
+	{
+		int Nk = 0;
+		Iterator<Integer> keySetIterator = rete.keySet().iterator();
+		while (keySetIterator.hasNext()) {
+		    Integer key1 = keySetIterator.next();
+		    //System.out.println("key: " + key1 + " value: " + map.get(key1));
+		    if (rete.get(key1).size() == k)
+		       	Nk++;			            
 		}
+			return Nk / getNodi();
+	}
 
 	// Average degree = 2L/N (L=num archi, N = num nodi)
 	
@@ -382,10 +387,10 @@ public class ReteSociale
 		 * Lmax indica il numero massimo di link che una rete di N nodi può avere 
 		 * @return double con il valore di Lmax
 		 */
-		public double Lmax () {
-			int N = getNodi();
-			return (N*(N-1))/2;
-		}
+	public double Lmax () {
+		int N = getNodi();
+		return (N*(N-1))/2;
+	}
 	// Diametro: il cammino più lungo possibile
 	// Average distance = (1/Lmax)* S_d<i,j>
 	// Clustering coefficient = 
@@ -394,35 +399,35 @@ public class ReteSociale
 	 * 
 	 * @return
 	 */
-		public boolean salva() {
-			System.out.println(nomeFileRete);
-			//if (modifiche) { // salva solo se necessario (se ci sono modifiche)				
-				try {
-					ObjectOutputStream file_output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFileRete)));
-					// salva l'intero oggetto nel file
-					file_output.writeObject(rete);
-					file_output.close();
-					file_output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFileUtenti)));
-					// salva l'intero oggetto nel file
-					file_output.writeObject(persone);
-					file_output.close();
-					modifiche = false; // le modifiche sono state salvate
-					return true;
-				} catch (IOException e) {
-					System.out.println("ERRORE di I/O");
-					System.out.println(e);
-					return false;
-				}	
-			//} else return true;
-		}
+	public boolean salva() {
+		System.out.println(nomeFileRete);
+		//if (modifiche) { // salva solo se necessario (se ci sono modifiche)				
+			try {
+				ObjectOutputStream file_output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFileRete)));
+				// salva l'intero oggetto nel file
+				file_output.writeObject(rete);
+				file_output.close();
+				file_output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFileUtenti)));
+				// salva l'intero oggetto nel file
+				file_output.writeObject(persone);
+				file_output.close();
+				modifiche = false; // le modifiche sono state salvate
+				return true;
+			} catch (IOException e) {
+				System.out.println("ERRORE di I/O");
+				System.out.println(e);
+				return false;
+			}	
+		//} else return true;
+	}
 		
-		public boolean salva(String file_rete, String file_utenti)
-		{
-			this.nomeFileRete = file_rete;
-			this.nomeFileUtenti = file_utenti;
+	public boolean salva(String file_rete, String file_utenti)
+	{
+		this.nomeFileRete = file_rete;
+		this.nomeFileUtenti = file_utenti;
 			
-			return this.salva();
-		}
+		return this.salva();
+	}
 	
 	/*public String toString()
 	{
