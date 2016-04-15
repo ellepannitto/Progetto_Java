@@ -21,7 +21,7 @@ public class Interface
 		}
 		catch (UserException e)
 		{
-				;
+			System.out.println ("Errore durante l'aggiunta: "+e);
 		}
 				
 	}
@@ -88,7 +88,7 @@ public class Interface
 		}
   }
   
-	public static void salva(Tastiera input, ReteSociale rete)
+	public static void salva(Saver saver, Tastiera input, ReteSociale rete)
 	{
 		System.out.println("Vuoi salvare la tua rete? 1=sì, 0=no");
 		int scelta= input.nextInt();
@@ -97,9 +97,8 @@ public class Interface
 		{
 			System.out.println("inserisci il nome del file su cui salvare la rete sociale");
 			String file_rete = input.nextLine();
-			System.out.println("inserisci il nome del file su cui salvare gli utenti della rete");
-			String file_utenti = input.nextLine();
-			rete.salva(file_rete, file_utenti);
+
+			saver.save(rete, file_rete);
 		}
 	}
 	
@@ -151,6 +150,8 @@ public class Interface
 		
 		ReteSociale mia_rete;
 		
+		Loader loader=new Loader();
+		Saver saver=new Saver();
 		
 		System.out.println("vuoi caricare una rete da file (1) o crearne una nuova (0)?");
 	
@@ -160,9 +161,8 @@ public class Interface
 		{
 			System.out.println("inserisci il nome del file da cui caricare la rete sociale");
 			String file_rete = input.nextLine();
-			System.out.println("inserisci il nome del file da cui caricare gli utenti della rete");
-			String file_utenti = input.nextLine();
-			mia_rete = new ReteSociale(file_rete, file_utenti);
+
+			mia_rete = loader.loadFromFile(file_rete);
 		}
 		else if (selezione==0)
 		{
@@ -221,21 +221,21 @@ public class Interface
 						superRemove(input, mia_rete);	
 						break;
 				case 6: System.out.println("hai selezionato: visualizzare relazioni\n");
-						getRelations();
+						//~ getRelations();
 						break;
 				case 7: System.out.println("hai selezionato: visualizzare nodi\n");
-						getNodi();
+						//~ getNodi();
 						break;
 				case 8: System.out.println("hai selezionato: visualizzare Degree Distribution della rete\n");
-						getDegreeDistribution();
+						//~ getDegreeDistribution();
 						break;
 				case 9: System.out.println("hai selezionato: visualizzare il cammino più lungo nella rete\n");
-						Lmax();
+						//~ rete.Lmax();
 						break;
 				case 10: System.out.println("hai selezionato: ricerca utenti per nome / cognome\n");
 						
 						break;
-				case 11: salva(input, mia_rete);
+				case 11: salva(saver, input, mia_rete);
 						System.out.println("Ciao ciao!"); 
 						condizione=false;
 						input.aspetta(); 

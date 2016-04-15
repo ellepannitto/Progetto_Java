@@ -10,6 +10,8 @@ public class Utente implements Serializable
 	private String cognome;
 	private Date data_di_nascita;
 	
+	
+	
 	public Utente (String nome, String cognome, Date data_di_nascita)
 	{
 		this.nome=nome;
@@ -30,7 +32,7 @@ public class Utente implements Serializable
 	
 	public String toString ()
 	{
-		return "("+this.id+") "+this.nome+" "+this.cognome;
+		return this.nome+" "+this.cognome;
 	}
 	
 	public int hashCode ()
@@ -44,18 +46,11 @@ public class Utente implements Serializable
 	
 		if (o != null && o instanceof Utente)
 		{			
-			if (this.id == ((Utente)o).getId())
-			{
-				ret=true;
-			}
-		}else if (o instanceof Integer)
-		{
-			if ((Integer)o == this.id)
+			if (this == ((Utente)o))
 			{
 				ret=true;
 			}
 		}
-		
 		return ret;
 	}
 	
