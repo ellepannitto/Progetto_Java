@@ -96,9 +96,9 @@ public class Interface
 		if (scelta==1)
 		{
 			System.out.println("inserisci il nome del file su cui salvare la rete sociale");
-			String file_rete = input.next();
+			String file_rete = input.nextLine();
 			System.out.println("inserisci il nome del file su cui salvare gli utenti della rete");
-			String file_utenti = input.next();
+			String file_utenti = input.nextLine();
 			rete.salva(file_rete, file_utenti);
 		}
 	}
@@ -159,9 +159,9 @@ public class Interface
 		if (selezione == 1) 
 		{
 			System.out.println("inserisci il nome del file da cui caricare la rete sociale");
-			String file_rete = input.next();
+			String file_rete = input.nextLine();
 			System.out.println("inserisci il nome del file da cui caricare gli utenti della rete");
-			String file_utenti = input.next();
+			String file_utenti = input.nextLine();
 			mia_rete = new ReteSociale(file_rete, file_utenti);
 		}
 		else if (selezione==0)
@@ -192,7 +192,8 @@ public class Interface
 								"- 7 getNodi\n"+
 								"- 8 getDegreeDistribution\n"+
 								"- 9 LMax\n"+
-								"- 10 per uscire\n");
+								"- 10 per cercare utenti per nome / cognome"+
+								"- 11 per uscire\n");
 			
 			int scelta=input.nextInt();
 			
@@ -216,10 +217,25 @@ public class Interface
 						stampaRete(mia_rete);
 						input.aspetta();
 						break;
-				case 5: System.out.println("hai selezionato SuperRemove\n");
+				case 5: System.out.println("hai selezionato: SuperRemove\n");
 						superRemove(input, mia_rete);	
 						break;
-				case 10: salva(input, mia_rete);
+				case 6: System.out.println("hai selezionato: visualizzare relazioni\n");
+						getRelations();
+						break;
+				case 7: System.out.println("hai selezionato: visualizzare nodi\n");
+						getNodi();
+						break;
+				case 8: System.out.println("hai selezionato: visualizzare Degree Distribution della rete\n");
+						getDegreeDistribution();
+						break;
+				case 9: System.out.println("hai selezionato: visualizzare il cammino più lungo nella rete\n");
+						Lmax();
+						break;
+				case 10: System.out.println("hai selezionato: ricerca utenti per nome / cognome\n");
+						
+						break;
+				case 11: salva(input, mia_rete);
 						System.out.println("Ciao ciao!"); 
 						condizione=false;
 						input.aspetta(); 
