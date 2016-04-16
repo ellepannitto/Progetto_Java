@@ -2,9 +2,20 @@ import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
+/**
+ * 
+ * La classe ReteSociale memorizza informazioni 
+ * 
+ * 
+ * @author Corradini Celestino, mat.
+ * @author Mercadante Giulia, mat.
+ * @author Pannitto Ludovica , mat. 491094
+ * @author Rambelli Giulia, mat.
+ * 
+ * */
 public class ReteSociale implements Serializable
 {
-	public int next_user_id = 0;
+	private int next_user_id = 0;
 	
 	private Map<Integer, Utente> persone;
 	private Map<Integer, Vector<Integer>> rete; 
@@ -17,11 +28,22 @@ public class ReteSociale implements Serializable
 		persone = new HashMap<Integer, Utente>();
 	}
 	
+	/**
+	 * Setta il file su cui serializzare la rete
+	 * 
+	 * @param nome_file	file da assegnare
+	 * 
+	 * */
 	public void setFile(String nome_file)
 	{
 		this.FileSalvataggio=nome_file;
 	}
 	
+	
+	/**
+	 * Restituisce il nome del file di salvataggio
+	 * 
+	 * */
 	public String getSavingFile()
 	{
 		return this.FileSalvataggio;
@@ -30,7 +52,7 @@ public class ReteSociale implements Serializable
 	/**
 	 * Stampa l'hashmap della rete sociale
 	 * 
-	 * @return String
+	 * @return String	output della rete nel formato: (id) nome cognome	Amici= (id) nome cognome [...] (id) nome cognome
 	 */
 	public String toString()
 	{
@@ -44,7 +66,7 @@ public class ReteSociale implements Serializable
 		    Map.Entry<Integer, Vector<Integer>> entry = it.next();
 		    
 		
-		    output = output +"("+entry.getKey()+") "+ persone.get(entry.getKey()) + "   ";
+		    output = output +"("+entry.getKey()+") "+ persone.get(entry.getKey()) + "\t";
 		    output = output + "Amici =";
 		    Vector<Integer> amici = entry.getValue();
 		    for (int i : amici) {
@@ -58,17 +80,41 @@ public class ReteSociale implements Serializable
 	}
 	
 	
+	/**
+	 * Restituisce un utente a partire dal suo id all'interno della rete
+	 * 
+	 * @param id	id dell'utente cercato
+	 * 
+	 * @return l'utente desiderato (oggetto di classe Utente)
+	 * 
+	 * @throws UserException	se l'id cercato non è presente nella rete
+	 * 
+	 * */
 	public Utente getUser (int id) throws UserException
 	{
+		Utente u=null;
 		boolean already_in = this.persone.containsKey(id);
 		if (already_in)
 		{
-			Utente u=this.persone.get(id);
-			return u;
+			u=this.persone.get(id);
+
 		}else{
 			throw new UserException("id "+id+" non presente nella rete sociale");
 		}
+		
+		return u;
 	}
+	
+	/**
+	 * Aggiunge un utente alla rete sociale
+	 * 
+	 * @param u	Utente da aggiungere alla rete
+	 * 
+	 * @return id (intero) dell'utente aggiunto alla rete
+	 * 
+	 * @throws UserException nel caso in cui l'utente sia già presente nella rete
+	 * 
+	 * */
 	
 	public int addUser(Utente u) throws UserException
 	{
@@ -94,6 +140,11 @@ public class ReteSociale implements Serializable
 		return id;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
 	private int getId(Utente u)
 	{
 		int id=-1;
@@ -110,6 +161,12 @@ public class ReteSociale implements Serializable
 		return id;
 	}
 	
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
 	public void removeUser (Utente u) throws UserException
 	{
 		boolean already_in = this.persone.containsValue(u);
@@ -188,7 +245,10 @@ public class ReteSociale implements Serializable
 		
 	}
 	
-	
+	/**
+	 * 
+	 * 
+	 * */
 	public void changeRelation (Utente a, Utente b, boolean add) throws UserException, RelationException
 	{
 		if (add)
@@ -202,7 +262,10 @@ public class ReteSociale implements Serializable
 		}	
 	}
 	
-	
+	/**
+	 * 
+	 * 
+	 * */
 	public void removeRelation (Utente a, Utente b) throws UserException, RelationException
 	{
 		boolean a_already_in = this.persone.containsValue(a);
@@ -237,7 +300,10 @@ public class ReteSociale implements Serializable
 		amici_di_b.remove(getId(a));
 		
 	}
-	
+	/**
+	 * 
+	 * 
+	 * */
 	public void SuperRemove (Utente a, Utente b) throws UserException, RelationException
 	{
 		boolean a_already_in = this.persone.containsValue(a);
@@ -280,7 +346,10 @@ public class ReteSociale implements Serializable
 			
 		}	
 	}
-	
+	/**
+	 * 
+	 * 
+	 * */
 	public Set<Utente> getRelations (Utente a, int d) throws UserException
 	{
 		boolean a_already_in = this.persone.containsValue(a);
@@ -298,7 +367,10 @@ public class ReteSociale implements Serializable
 		
 		
 	}
-	
+	/**
+	 * 
+	 * 
+	 * */
 	private Set<Integer> getRelations_bfs (int a, int d)
 	{
 		
@@ -346,7 +418,10 @@ public class ReteSociale implements Serializable
 
 	}
 	
-	
+	/**
+	 * 
+	 * 
+	 * */
 	private Set<Utente> converti (Set<Integer> lista)
 	{
 		Set<Utente> ret=new HashSet<Utente>();
@@ -359,7 +434,11 @@ public class ReteSociale implements Serializable
 		
 		return ret;
 	}
-	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
 	public int getNodi () 
 	{
 			return rete.size();
@@ -367,6 +446,10 @@ public class ReteSociale implements Serializable
 		
 	/**
 	 * Restituisce la distribuzione di probabilità per il grado k di un nodo nella rete
+	 * 
+	 * @param k	intero...
+	 * 
+	 * @return ...
 	 * */
 	public double getDegreeDistribution (int k) 
 	{
@@ -385,6 +468,7 @@ public class ReteSociale implements Serializable
 	
 	/**
 	 * Lmax indica il numero massimo di link che una rete di N nodi può avere 
+	 * 
 	 * @return double con il valore di Lmax
 	 */
 	public double Lmax () {

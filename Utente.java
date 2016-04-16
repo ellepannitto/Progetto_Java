@@ -1,6 +1,14 @@
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * @author Corradini Celestino, mat.
+ * @author Mercadante Giulia, mat.
+ * @author Pannitto Ludovica , mat. 491094
+ * @author Rambelli Giulia, mat.
+ * 
+ * */
+
 public class Utente implements Serializable
 {
 	private static int next_id = 0;

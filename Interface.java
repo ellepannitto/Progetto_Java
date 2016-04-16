@@ -1,7 +1,20 @@
 import java.util.*;
 
+/**
+ * @author Corradini Celestino, mat.
+ * @author Mercadante Giulia, mat.
+ * @author Pannitto Ludovica , mat. 491094
+ * @author Rambelli Giulia, mat.
+ * 
+ * */
+
 public class Interface
 {
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
 	private static void aggiungiUtente(Tastiera input, ReteSociale rete)
 	{
 		String nome;
@@ -26,6 +39,11 @@ public class Interface
 				
 	}
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
 	public static void rimuoviUtente(Tastiera input, ReteSociale rete)
 	{
 		//~ System.out.println(rete);
@@ -49,6 +67,10 @@ public class Interface
 		
 	}
 	
+	/**
+	 * 
+	 * 
+	 * */
 	public static void modificaAmicizia(Tastiera input, ReteSociale rete)
 	{
 		//~ System.out.println(rete);
@@ -86,8 +108,13 @@ public class Interface
 		{
 			;
 		}
-  }
-  
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
 	public static void salva(Saver saver, Tastiera input, ReteSociale rete)
 	{
 		System.out.println("Vuoi salvare la tua rete? 1=sì, 0=no");
@@ -102,6 +129,10 @@ public class Interface
 		}
 	}
 	
+	/**
+	 * 
+	 * 
+	 * */
 	private static void stampaRete(ReteSociale rete)
 	{
 		
@@ -119,6 +150,10 @@ public class Interface
 
 	}
 	
+	/**
+	 * 
+	 * 
+	 * */
 	private static void superRemove (Tastiera input, ReteSociale rete)
 	{
 		stampaRete(rete);
@@ -144,6 +179,11 @@ public class Interface
 		
 	}
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
 	public static void main(String[] args) 
 	{
 		Tastiera input=new Tastiera();
@@ -152,6 +192,8 @@ public class Interface
 		
 		Loader loader=new Loader();
 		Saver saver=new Saver();
+		
+		boolean condizione=true;
 		
 		System.out.println("vuoi caricare una rete da file (1) o crearne una nuova (0)?");
 	
@@ -175,7 +217,7 @@ public class Interface
 		}
 		
 		
-		boolean condizione=true;
+		
 		
 		while (condizione)
 		{
@@ -192,7 +234,7 @@ public class Interface
 								"- 7 getNodi\n"+
 								"- 8 getDegreeDistribution\n"+
 								"- 9 LMax\n"+
-								"- 10 per cercare utenti per nome / cognome"+
+								"- 10 per cercare utenti per nome / cognome\n"+
 								"- 11 per uscire\n");
 			
 			int scelta=input.nextInt();
@@ -245,6 +287,5 @@ public class Interface
 		}
 
 	}
-	
 	
 }

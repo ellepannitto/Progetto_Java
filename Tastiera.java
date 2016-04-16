@@ -1,11 +1,23 @@
 import java.util.*;
 
+/**
+ * @author Corradini Celestino, mat.
+ * @author Mercadante Giulia, mat.
+ * @author Pannitto Ludovica , mat. 491094
+ * @author Rambelli Giulia, mat.
+ * 
+ * */
+
 public class Tastiera
 {
 	private Scanner input=new Scanner(System.in);
 	
 	
-	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
 	public int nextInt()
 	{
 		boolean scelto=false;
@@ -29,6 +41,11 @@ public class Tastiera
 		return selezione;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
 	public String next()
 	{
 		boolean condizione=false;
@@ -51,6 +68,11 @@ public class Tastiera
 		return s;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
 	public void aspetta()
 	{
 		//~ String carattere;
@@ -69,11 +91,14 @@ public class Tastiera
 		
 	}
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
 	public String nextLine()
 	{
 		input.useDelimiter("\\n");
 		return input.next();
 	}
-	
-	
 }
