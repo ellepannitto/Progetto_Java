@@ -23,9 +23,20 @@ public class ReteSociale implements Serializable
 	private String FileSalvataggio = "";
 	
 	
-	public ReteSociale() {
+	public ReteSociale() 
+	{
 		rete = new HashMap<Integer, Vector<Integer>>(); 
 		persone = new HashMap<Integer, Utente>();
+	}
+	
+	public Map<Integer, Vector<Integer>> getRete()
+	{
+		return this.rete;
+	}
+	
+	public Map<Integer, Utente> getUtenti()
+	{
+		return this.persone;
 	}
 	
 	/**
@@ -476,34 +487,9 @@ public class ReteSociale implements Serializable
 		return (N*(N-1))/2;
 	}
 	
-	public void dumpXML(String nome_file) throws FileNotFoundException, UnsupportedEncodingException
+	public void dumpXML(String nome_file) 
 	{
-		PrintWriter writer = new PrintWriter(nome_file, "UTF-8");
-		Iterator<Entry<Integer, Vector<Integer>>> it = rete.entrySet().iterator();
-		writer.println("<?xml version=\"1.0\"?>");
-		writer.println("<ReteSociale>");
 		
-		while (it.hasNext()) {
-		
-		    Map.Entry<Integer, Vector<Integer>> entry = it.next();
-		    
-			writer.println("\t<Utente id='"+entry.getKey()+"'>");
-			
-			Utente u=persone.get(entry.getKey());
-			
-			writer.println("\t\t<nome>"+u.getNome()+"</nome>");
-			writer.println("\t\t<cognome>"+u.getCognome()+"</cognome>");
-		
-			writer.println("\t\t<amici>");
-			Vector<Integer> amici = entry.getValue();	
-			for (int i : amici) {
-				writer.println("\t\t\t<id>"+i+"</id>");
-		    }
-			writer.println("\t\t</amici>");
-			writer.println("\t</Utente>");
-		}
-		writer.println("</ReteSociale>");
-		writer.close();
 	}
 	
 	// Diametro: il cammino più lungo possibile

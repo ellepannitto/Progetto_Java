@@ -297,14 +297,14 @@ public class Interface
 
 	}
 	
-	public static void esportaXML(Tastiera input, ReteSociale rete)
+	public static void esportaXML(Tastiera input, ReteSociale rete, Saver saver)
 	{
 		System.out.println("Inserisci nome file su cui esportare:");
 		String file_xml=input.nextLine();
 		file_xml+=".xml";
 		try
 		{
-			rete.dumpXML(file_xml);	
+			saver.saveXML(file_xml);	
 		}
 		catch(Exception e)
 		{
@@ -350,7 +350,7 @@ public class Interface
 					
 					break;
 			case 11: System.out.println("hai selezionato: esporta in xml\n");
-					esportaXML(input, rete);
+					esportaXML(input, rete, saver);
 					break;
 			case 12: System.out.println("Ciao ciao!"); 
 					ret=true; 
