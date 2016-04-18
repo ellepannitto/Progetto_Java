@@ -7,15 +7,21 @@ import java.util.*;
  * @author Rambelli Giulia, mat.
  * 
  * */
-
 public class Interface
 {
 	
-	//~ private Tastiera input;
-	//~ private ReteSociale rete;
-	
-	//~ private Loader loader;
-	//~ private Saver saver;
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
+	private static void distribuzione(Tastiera input, ReteSociale rete)
+	{
+		int k=input.nextInt();
+		
+		System.out.println("...: "+rete.getDegreeDistribution(k));
+		
+	}
 	
 	/**
 	 * 
@@ -186,6 +192,41 @@ public class Interface
 		
 	}
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
+	private static void mostraRelazioni(Tastiera input, ReteSociale rete)
+	{
+		stampaRete(rete);
+		
+		Set<Utente> ret=null;
+		
+		System.out.println("Inserisci l'id dell'utente di cui vuoi visualizzare le relazioni:");
+		int i=input.nextInt();
+		
+		System.out.println("Inserisci distanza:");
+		int d=input.nextInt();
+		
+		try
+		{
+			Utente u = rete.getUser(i);
+		
+			ret=rete.getRelations(u, d);
+		}
+		catch(UserException e)
+		{
+			;
+		}
+		
+		System.out.println(ret);
+	}
+	
+	/**
+	 * 
+	 * 
+	 * */
 	private static void resetConsole()
 	{
 		System.out.println("\033[H\033[2J");
@@ -202,7 +243,8 @@ public class Interface
 							"- 8 getDegreeDistribution\n"+
 							"- 9 LMax\n"+
 							"- 10 per cercare utenti per nome / cognome\n"+
-							"- 11 per uscire\n");
+							"- 11 per salvare la rete in xml\n"+
+							"- 12 per uscire\n");
 	}
 	
 	/**
@@ -255,6 +297,22 @@ public class Interface
 
 	}
 	
+	public static void esportaXML(Tastiera input, ReteSociale rete)
+	{
+		System.out.println("Inserisci nome file su cui esportare:");
+		String file_xml=input.nextLine();
+		file_xml+=".xml";
+		try
+		{
+			rete.dumpXML(file_xml);	
+		}
+		catch(Exception e)
+		{
+			System.out.println("errore esportazione xml "+e);
+		}
+
+	}
+	
 	private static boolean gestisciMenu (Tastiera input, int scelta, ReteSociale rete)
 	{
 		boolean ret=false;
@@ -272,27 +330,29 @@ public class Interface
 					break;
 			case 4: System.out.println("hai selezionato: stampare rete sociale\n");
 					stampaRete(rete);
-					input.aspetta();
 					break;
 			case 5: System.out.println("hai selezionato: SuperRemove\n");
 					superRemove(input, rete);	
 					break;
 			case 6: System.out.println("hai selezionato: visualizzare relazioni\n");
-					//~ getRelations();
+					mostraRelazioni(input, rete);
 					break;
 			case 7: System.out.println("hai selezionato: visualizzare nodi\n");
-					//~ getNodi();
+					System.out.println("Dimensione rete: "+rete.getNodi());
 					break;
 			case 8: System.out.println("hai selezionato: visualizzare Degree Distribution della rete\n");
-					//~ getDegreeDistribution();
+					distribuzione(input, rete);
 					break;
 			case 9: System.out.println("hai selezionato: visualizzare il cammino più lungo nella rete\n");
-					//~ rete.Lmax();
+					System.out.println("...: "+rete.Lmax());
 					break;
 			case 10: System.out.println("hai selezionato: ricerca utenti per nome / cognome\n");
 					
 					break;
-			case 11: System.out.println("Ciao ciao!"); 
+			case 11: System.out.println("hai selezionato: esporta in xml\n");
+					esportaXML(input, rete);
+					break;
+			case 12: System.out.println("Ciao ciao!"); 
 					ret=true; 
 					break;
 			default: System.out.println("il numero da te selezionato non esiste");

@@ -441,7 +441,7 @@ public class ReteSociale implements Serializable
 	 * */
 	public int getNodi () 
 	{
-			return rete.size();
+		return rete.size();
 	}
 		
 	/**
@@ -474,6 +474,36 @@ public class ReteSociale implements Serializable
 	public double Lmax () {
 		int N = getNodi();
 		return (N*(N-1))/2;
+	}
+	
+	public void dumpXML(String nome_file) throws FileNotFoundException, UnsupportedEncodingException
+	{
+		PrintWriter writer = new PrintWriter(nome_file, "UTF-8");
+		Iterator<Entry<Integer, Vector<Integer>>> it = rete.entrySet().iterator();
+		writer.println("<?xml version=\"1.0\"?>");
+		writer.println("<ReteSociale>");
+		
+		while (it.hasNext()) {
+		
+		    Map.Entry<Integer, Vector<Integer>> entry = it.next();
+		    
+			writer.println("\t<Utente id='"+entry.getKey()+"'>");
+			
+			Utente u=persone.get(entry.getKey());
+			
+			writer.println("\t\t<nome>"+u.getNome()+"</nome>");
+			writer.println("\t\t<cognome>"+u.getCognome()+"</cognome>");
+		
+			writer.println("\t\t<amici>");
+			Vector<Integer> amici = entry.getValue();	
+			for (int i : amici) {
+				writer.println("\t\t\t<id>"+i+"</id>");
+		    }
+			writer.println("\t\t</amici>");
+			writer.println("\t</Utente>");
+		}
+		writer.println("</ReteSociale>");
+		writer.close();
 	}
 	
 	// Diametro: il cammino più lungo possibile

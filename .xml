@@ -1,0 +1,14 @@
+<ReteSociale>
+	<Utente id='0'>
+		<nome>a</nome>
+		<cognome>b</cognome>
+		<amici>
+		</amici>
+	</Utente>
+	<Utente id='1'>
+		<nome>d</nome>
+		<cognome>f</cognome>
+		<amici>
+		</amici>
+	</Utente>
+</ReteSociale>

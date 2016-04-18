@@ -14,7 +14,7 @@ public class Tastiera
 	
 	
 	/**
-	 * 
+	 * Gestisce l'input di un intero
 	 * 
 	 * 
 	 * */
@@ -42,8 +42,9 @@ public class Tastiera
 	}
 	
 	/**
+	 * Gestisce l'input di una stringa eventualmente intervallata da spazi
 	 * 
-	 * 
+	 * @return stringa s
 	 * 
 	 * */
 	public String next()
@@ -69,17 +70,12 @@ public class Tastiera
 	}
 	
 	/**
-	 * 
+	 * Aspetta un input
 	 * 
 	 * 
 	 * */
 	public void aspetta()
 	{
-		//~ String carattere;
-		//~ if (!input.hasNextLine())
-		//~ {
-			//~ carattere = input.nextLine();
-		//~ }
 		System.out.println("\npremi ENTER per continuare");
 		try
 		{

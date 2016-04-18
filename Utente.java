@@ -67,4 +67,14 @@ public class Utente implements Serializable
 		return this.id;
 	}
 	
+	public String getNome()
+	{
+		return this.nome;
+	}
+
+	public String getCognome()
+	{
+		return this.cognome;
+	}
+	
 }
