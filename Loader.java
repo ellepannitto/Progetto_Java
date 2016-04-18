@@ -39,7 +39,7 @@ public class Loader
 		
 		
 		rete.setFile(file_rete);
-		System.out.println ("[DEBUG] prossimo id: "+rete.next_user_id);
+	
 		return rete;
 	}
 }

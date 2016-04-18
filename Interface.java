@@ -10,6 +10,13 @@ import java.util.*;
 
 public class Interface
 {
+	
+	//~ private Tastiera input;
+	//~ private ReteSociale rete;
+	
+	//~ private Loader loader;
+	//~ private Saver saver;
+	
 	/**
 	 * 
 	 * 
@@ -46,7 +53,7 @@ public class Interface
 	 * */
 	public static void rimuoviUtente(Tastiera input, ReteSociale rete)
 	{
-		//~ System.out.println(rete);
+		stampaRete(rete);
 		System.out.println("Inserisci l'id dell'utente da rimuovere");
 		
 		int id_utente=input.nextInt();
@@ -73,7 +80,7 @@ public class Interface
 	 * */
 	public static void modificaAmicizia(Tastiera input, ReteSociale rete)
 	{
-		//~ System.out.println(rete);
+		stampaRete(rete);
 		System.out.println("Seleziona il primo utente");
 		int id_utenteUno=input.nextInt ();
 		System.out.println("Seleziona il secondo utente");
@@ -179,6 +186,25 @@ public class Interface
 		
 	}
 	
+	private static void resetConsole()
+	{
+		System.out.println("\033[H\033[2J");
+		System.out.flush();
+			
+		System.out.println("Cosa vuoi fare? Rispondi:\n"+
+							"- 1 per inserire un nuovo utente\n"+
+							"- 2 per rimuovere un utente\n"+
+							"- 3 aggiungere o rimuovere una relazione di amicizia\n"+
+							"- 4 per stampare la rete sociale\n"+
+							"- 5 per effetturare l'operazione SuperRemove\n"+
+							"- 6 per vedere le relazioni a distanza d da un utente\n"+
+							"- 7 getNodi\n"+
+							"- 8 getDegreeDistribution\n"+
+							"- 9 LMax\n"+
+							"- 10 per cercare utenti per nome / cognome\n"+
+							"- 11 per uscire\n");
+	}
+	
 	/**
 	 * 
 	 * 
@@ -193,99 +219,89 @@ public class Interface
 		Loader loader=new Loader();
 		Saver saver=new Saver();
 		
-		boolean condizione=true;
+		boolean termina_menu=false;
+		String file_input="";
+	
 		
-		System.out.println("vuoi caricare una rete da file (1) o crearne una nuova (0)?");
-	
-		int selezione = input.nextInt();
-	
-		if (selezione == 1) 
+		try
 		{
-			System.out.println("inserisci il nome del file da cui caricare la rete sociale");
-			String file_rete = input.nextLine();
-
-			mia_rete = loader.loadFromFile(file_rete);
+			file_input = args[0];
 		}
-		else if (selezione==0)
+		catch (Exception e)
+		{
+			System.out.println("Non hai indicato nessun file da cui caricare la tua rete sociale.\nNe verrà creata una nuova");	
+		}
+		
+		
+		if (file_input.equals(""))
 		{
 			mia_rete=new ReteSociale();
 		}
 		else
 		{
-			mia_rete=new ReteSociale();
-			System.out.println("La scelta non era valida, ho creato una nuova rete");
+			mia_rete = loader.loadFromFile(file_input);
 		}
-		
-		
-		
-		
-		while (condizione)
+				
+		while (!termina_menu)
 		{
-			System.out.println("\033[H\033[2J");
-			System.out.flush();
-			
-			System.out.println("Cosa vuoi fare? Rispondi:\n"+
-								"- 1 per inserire un nuovo utente\n"+
-								"- 2 per rimuovere un utente\n"+
-								"- 3 aggiungere o rimuovere una relazione di amicizia\n"+
-								"- 4 per stampare la rete sociale\n"+
-								"- 5 per effetturare l'operazione SuperRemove\n"+
-								"- 6 per vedere le relazioni a distanza d da un utente\n"+
-								"- 7 getNodi\n"+
-								"- 8 getDegreeDistribution\n"+
-								"- 9 LMax\n"+
-								"- 10 per cercare utenti per nome / cognome\n"+
-								"- 11 per uscire\n");
+			resetConsole();
 			
 			int scelta=input.nextInt();
 			
-			switch (scelta)
-			{
-				case 1: System.out.println("hai selezionato: inserire un nuovo utente"); 
-						aggiungiUtente(input, mia_rete);
-						input.aspetta();
-						break;
-				case 2: System.out.println("hai selezionato: rimuovere un utente"); 
-						stampaRete(mia_rete);
-						rimuoviUtente(input, mia_rete);
-						input.aspetta();
-						break;
-				case 3: System.out.println("hai selezionato: aggiungere o rimuovere una relazione di amicizia"); 
-						stampaRete(mia_rete);
-						modificaAmicizia(input, mia_rete);
-						input.aspetta();
-						break;
-				case 4: System.out.println("hai selezionato: stampare rete sociale\n");
-						stampaRete(mia_rete);
-						input.aspetta();
-						break;
-				case 5: System.out.println("hai selezionato: SuperRemove\n");
-						superRemove(input, mia_rete);	
-						break;
-				case 6: System.out.println("hai selezionato: visualizzare relazioni\n");
-						//~ getRelations();
-						break;
-				case 7: System.out.println("hai selezionato: visualizzare nodi\n");
-						//~ getNodi();
-						break;
-				case 8: System.out.println("hai selezionato: visualizzare Degree Distribution della rete\n");
-						//~ getDegreeDistribution();
-						break;
-				case 9: System.out.println("hai selezionato: visualizzare il cammino più lungo nella rete\n");
-						//~ rete.Lmax();
-						break;
-				case 10: System.out.println("hai selezionato: ricerca utenti per nome / cognome\n");
-						
-						break;
-				case 11: salva(saver, input, mia_rete);
-						System.out.println("Ciao ciao!"); 
-						condizione=false;
-						input.aspetta(); 
-						break;
-				default: System.out.println("il numero da te selezionato non esiste");
-			}
+			termina_menu = gestisciMenu(input, scelta, mia_rete);
 		}
+		
+		salva(saver, input, mia_rete);
 
+	}
+	
+	private static boolean gestisciMenu (Tastiera input, int scelta, ReteSociale rete)
+	{
+		boolean ret=false;
+		
+		switch (scelta)
+		{
+			case 1: System.out.println("hai selezionato: inserire un nuovo utente"); 
+					aggiungiUtente(input, rete);
+					break;
+			case 2: System.out.println("hai selezionato: rimuovere un utente"); 
+					rimuoviUtente(input, rete);
+					break;
+			case 3: System.out.println("hai selezionato: aggiungere o rimuovere una relazione di amicizia"); 
+					modificaAmicizia(input, rete);
+					break;
+			case 4: System.out.println("hai selezionato: stampare rete sociale\n");
+					stampaRete(rete);
+					input.aspetta();
+					break;
+			case 5: System.out.println("hai selezionato: SuperRemove\n");
+					superRemove(input, rete);	
+					break;
+			case 6: System.out.println("hai selezionato: visualizzare relazioni\n");
+					//~ getRelations();
+					break;
+			case 7: System.out.println("hai selezionato: visualizzare nodi\n");
+					//~ getNodi();
+					break;
+			case 8: System.out.println("hai selezionato: visualizzare Degree Distribution della rete\n");
+					//~ getDegreeDistribution();
+					break;
+			case 9: System.out.println("hai selezionato: visualizzare il cammino più lungo nella rete\n");
+					//~ rete.Lmax();
+					break;
+			case 10: System.out.println("hai selezionato: ricerca utenti per nome / cognome\n");
+					
+					break;
+			case 11: System.out.println("Ciao ciao!"); 
+					ret=true; 
+					break;
+			default: System.out.println("il numero da te selezionato non esiste");
+		}
+		
+		input.aspetta();
+		
+		return ret;
+		
 	}
 	
 }

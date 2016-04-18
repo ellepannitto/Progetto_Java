@@ -56,7 +56,7 @@ public class Tastiera
 			
 			if (!nuovo.equals(""))
 			{
-				System.out.println(s);
+				//~ System.out.println(s);
 				s+=input.next();
 			}
 			else

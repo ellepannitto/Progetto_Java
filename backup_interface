@@ -1,0 +1,23 @@
+		//~ System.out.println(file_input);
+		//~ System.out.println("sono pronto per cominciare");
+		
+		
+		
+		//~ System.out.println("vuoi caricare una rete da file (1) o crearne una nuova (0)?");
+	
+		//~ int selezione = input.nextInt();
+	
+		//~ if (selezione == 1) 
+		//~ {
+			//~ System.out.println("inserisci il nome del file da cui caricare la rete sociale");
+			//~ String file_rete = input.nextLine();			
+		//~ }
+		//~ else if (selezione==0)
+		//~ {
+			//~ mia_rete=new ReteSociale();
+		//~ }
+		//~ else
+		//~ {
+			//~ mia_rete=new ReteSociale();
+			//~ System.out.println("La scelta non era valida, ho creato una nuova rete");
+		//~ }
