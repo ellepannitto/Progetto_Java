@@ -1,4 +1,7 @@
+
 import java.io.*;
+import java.util.*;
+import org.jdom2.*;
 
 /**
  * @author Corradini Celestino, mat.
@@ -10,10 +13,10 @@ import java.io.*;
 
 public class Loader
 {
-	public ReteSociale loadFromFile(String file_rete){
-		
+	private ReteSociale loadObject(String file_rete)
+	{
 		ReteSociale rete=null;
-
+		
 		try {
 			
 			ObjectInputStream file_input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file_rete)));
@@ -42,4 +45,47 @@ public class Loader
 	
 		return rete;
 	}
+	
+	private ReteSociale loadFromXML(String file_rete)
+	{
+		ReteSociale rete = null;
+		
+		try
+		{
+			File fileinput = new File(file_rete);
+			SAXBuilder saxBuiler = new SAXBuilder();
+			
+			Document document = saxBuilder.build(fileinput);
+			
+			System.out.println("Root element :" + document.getRootElement().getName());
+			
+		}
+		catch(Exception e)
+		{
+			;
+		}
+		
+	}
+	
+	
+	public ReteSociale loadFromFile(String file_rete){
+
+		ReteSociale rete=null;
+	
+		boolean isXML = file_rete.endsWith(".xml");
+		
+	
+		if (isXML)
+		{
+			rete = loadFromXML(file_rete);
+		}
+		else
+		{
+			rete = loadObject(file_rete);
+		}
+		
+		return rete;
+		
+	}
+	
 }
