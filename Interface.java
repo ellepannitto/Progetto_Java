@@ -1,4 +1,6 @@
 import java.util.*;
+import org.jdom2.JDOMException;
+
 
 /**
  * @author Corradini Celestino, mat.
@@ -9,6 +11,77 @@ import java.util.*;
  * */
 public class Interface
 {
+	private static Tastiera input = new Tastiera();
+	private static ReteSociale rete = new ReteSociale();
+	private static Loader loader = new Loader();
+	private static Saver saver = new Saver();
+	
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
+	public static void main(String[] args) 
+	{
+			
+		boolean termina_menu=false;
+		
+		String file_input="";
+	
+	
+		if (args.length>0)
+		{
+			System.out.println(args[0]);
+			file_input = args[0];
+		}
+		else
+		{
+			System.out.println("Non hai indicato nessun file da cui caricare la tua rete sociale.");
+			file_input = chiediFile();
+		}
+		
+		if (file_input.equals(""))
+		{
+			rete=new ReteSociale();
+		}
+		else
+		{
+			rete = loader.loadFromFile(file_input);
+		}
+				
+		while (!termina_menu)
+		{
+			input.aspetta();
+			resetConsole();
+			
+			int scelta=input.nextInt();
+			
+			termina_menu = gestisciMenu(input, scelta, rete, saver);
+		}
+		
+		salva(saver, input, rete);
+
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
+	private static String chiediFile()
+	{	
+		System.out.println("Vuoi caricare una rete da file?\n - 1 -> sì\n - 0 -> no");
+		int selezione = input.nextInt();
+		
+		String nome_file="";
+		if (selezione==1)
+		{
+			nome_file=input.next();
+		}
+		
+		return nome_file;
+	}
 	
 	/**
 	 * 
@@ -159,8 +232,6 @@ public class Interface
 		{
 			System.out.println(s);
 		}
-		
-
 	}
 	
 	/**
@@ -247,55 +318,7 @@ public class Interface
 							"- 12 per uscire\n");
 	}
 	
-	/**
-	 * 
-	 * 
-	 * 
-	 * */
-	public static void main(String[] args) 
-	{
-		Tastiera input=new Tastiera();
-		
-		ReteSociale mia_rete;
-		
-		Loader loader=new Loader();
-		Saver saver=new Saver();
-		
-		boolean termina_menu=false;
-		String file_input="";
-	
-		
-		try
-		{
-			file_input = args[0];
-		}
-		catch (Exception e)
-		{
-			System.out.println("Non hai indicato nessun file da cui caricare la tua rete sociale.\nNe verrà creata una nuova");	
-		}
-		
-		
-		if (file_input.equals(""))
-		{
-			mia_rete=new ReteSociale();
-		}
-		else
-		{
-			mia_rete = loader.loadFromFile(file_input);
-		}
-				
-		while (!termina_menu)
-		{
-			resetConsole();
-			
-			int scelta=input.nextInt();
-			
-			termina_menu = gestisciMenu(input, scelta, mia_rete);
-		}
-		
-		salva(saver, input, mia_rete);
 
-	}
 	
 	public static void esportaXML(Tastiera input, ReteSociale rete, Saver saver)
 	{
@@ -304,7 +327,7 @@ public class Interface
 		file_xml+=".xml";
 		try
 		{
-			saver.saveXML(file_xml);	
+			saver.saveXML(rete, file_xml);	
 		}
 		catch(Exception e)
 		{
@@ -313,7 +336,7 @@ public class Interface
 
 	}
 	
-	private static boolean gestisciMenu (Tastiera input, int scelta, ReteSociale rete)
+	private static boolean gestisciMenu (Tastiera input, int scelta, ReteSociale rete, Saver saver)
 	{
 		boolean ret=false;
 		

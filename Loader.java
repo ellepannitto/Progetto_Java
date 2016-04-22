@@ -1,7 +1,14 @@
 
 import java.io.*;
 import java.util.*;
-import org.jdom2.*;
+
+
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+
 
 /**
  * @author Corradini Celestino, mat.
@@ -13,6 +20,12 @@ import org.jdom2.*;
 
 public class Loader
 {
+	
+	public Loader(){
+		System.out.println("Creo Loader");
+	}
+	
+	
 	private ReteSociale loadObject(String file_rete)
 	{
 		ReteSociale rete=null;
@@ -53,17 +66,62 @@ public class Loader
 		try
 		{
 			File fileinput = new File(file_rete);
-			SAXBuilder saxBuiler = new SAXBuilder();
+			SAXBuilder saxBuilder = new SAXBuilder();
 			
 			Document document = saxBuilder.build(fileinput);
 			
-			System.out.println("Root element :" + document.getRootElement().getName());
+			Element radice = document.getRootElement();
+			
+			List<Element> utenti = radice.getChildren();
+			
+			Map<Integer, Utente>  mapping_utenti = new HashMap <Integer, Utente>();
+			Map<Integer, Vector<Integer>>  mapping_rete = new HashMap <Integer, Vector<Integer>>();
+			
+			for(int i=0; i<utenti.size(); i++)
+			{
+				Element nodo_utente = utenti.get(i);
+				int id = Integer.parseInt( nodo_utente.getAttribute("id").getValue() );	
+				
+				
+				String nome = nodo_utente.getChild("nome").getText();
+				String cognome = nodo_utente.getChild("cognome").getText();
+				
+				Utente u=new Utente(nome, cognome);
+				
+				Element nodo_amici = nodo_utente.getChild("amici");
+				
+				List<Element> id_amici = nodo_amici.getChildren();
+				
+				Vector<Integer> lista_amici = new Vector<Integer>();
+				
+				for (int j=0; j<id_amici.size(); j++)
+				{
+					Element nodo_amico = id_amici.get(j);
+					
+					int id_amico = Integer.parseInt( nodo_amico.getText() );
+					
+					lista_amici.addElement( id_amico );
+				}	
+				
+				mapping_utenti.put(id, u);
+				mapping_rete.put(id, lista_amici);
+			}
+			
+			rete = new ReteSociale();
+			
+			rete.caricaDaXML ( mapping_utenti, mapping_rete );
 			
 		}
-		catch(Exception e)
+		catch(JDOMException e)
 		{
-			;
+			e.printStackTrace();
 		}
+		catch(IOException ioe)
+		{
+			ioe.printStackTrace();
+		}
+		
+		return rete;
 		
 	}
 	

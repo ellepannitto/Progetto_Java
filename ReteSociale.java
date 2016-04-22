@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.Collections;
 
 /**
  * 
@@ -487,8 +488,19 @@ public class ReteSociale implements Serializable
 		return (N*(N-1))/2;
 	}
 	
-	public void dumpXML(String nome_file) 
+	public void caricaDaXML(Map<Integer, Utente> mapping_persone, Map<Integer, Vector<Integer>> mapping_rete) 
 	{
+		//~ System.out.println("sono qui");
+		
+		int max=0;
+		
+		Set<Integer> chiavi = mapping_persone.keySet();
+		max = Collections.max(chiavi);
+		
+		next_user_id=max;
+		
+		persone = mapping_persone;
+		rete = mapping_rete;
 		
 	}
 	
