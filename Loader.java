@@ -168,7 +168,7 @@ public class Loader
 		
 		if (rete == null)
 		{
-			System.err.println ("Errore durante il caricamento della rete da file.")
+			System.err.println ("Errore durante il caricamento della rete da file.");
 			System.exit(1);
 		}
 		return rete;

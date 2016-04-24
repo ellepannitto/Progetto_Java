@@ -123,7 +123,7 @@ public class Interface
 		catch (UserException e)
 		{
 			System.err.println ("Errore durante l'aggiunta dell'utente alla rete");
-			System.err.println (e.printStackTrace());
+			e.printStackTrace();
 		}
 				
 	}
@@ -135,7 +135,7 @@ public class Interface
 	 * */
 	public static void rimuoviUtente()
 	{
-		stampaRete(rete);
+		stampaRete();
 		System.out.println("Inserisci l'id dell'utente da rimuovere");
 		
 		int id_utente=input.nextInt();
@@ -151,7 +151,7 @@ public class Interface
 		}
 		catch (UserException e)
 		{
-			System.err.println("Errore durante la rimozione dell'utente dalla rete: "+e)
+			System.err.println("Errore durante la rimozione dell'utente dalla rete: "+e);
 		}
 		
 	}
@@ -162,7 +162,7 @@ public class Interface
 	 * */
 	public static void modificaAmicizia()
 	{
-		stampaRete(rete);
+		stampaRete();
 		System.out.println("Seleziona il primo utente");
 		int id_utenteUno=input.nextInt ();
 		System.out.println("Seleziona il secondo utente");
@@ -243,7 +243,7 @@ public class Interface
 	 * */
 	private static void superRemove ()
 	{
-		stampaRete(rete);
+		stampaRete();
 		
 		System.out.println("Inserisci id del primo utente:");
 		int id_utente_uno=input.nextInt();
@@ -273,7 +273,7 @@ public class Interface
 	 * */
 	private static void mostraRelazioni()
 	{
-		stampaRete(rete);
+		stampaRete();
 		
 		Set<Utente> ret=null;
 		
