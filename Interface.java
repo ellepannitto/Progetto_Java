@@ -3,7 +3,7 @@ import org.jdom2.JDOMException;
 
 
 /**
- * @author Corradini Celestino, mat.
+ * @author Corradini Celestino, mat. 527813
  * @author Mercadante Giulia, mat.
  * @author Pannitto Ludovica , mat. 491094
  * @author Rambelli Giulia, mat.
@@ -29,10 +29,8 @@ public class Interface
 		
 		String file_input="";
 	
-	
 		if (args.length>0)
 		{
-			System.out.println(args[0]);
 			file_input = args[0];
 		}
 		else
@@ -40,6 +38,7 @@ public class Interface
 			System.out.println("Non hai indicato nessun file da cui caricare la tua rete sociale.");
 			file_input = chiediFile();
 		}
+		
 		
 		if (file_input.equals(""))
 		{
@@ -49,24 +48,27 @@ public class Interface
 		{
 			rete = loader.loadFromFile(file_input);
 		}
+		
+		input.aspetta();
+		
 				
 		while (!termina_menu)
 		{
-			input.aspetta();
 			resetConsole();
 			
 			int scelta=input.nextInt();
 			
-			termina_menu = gestisciMenu(input, scelta, rete, saver);
+			termina_menu = gestisciMenu(scelta);
 		}
 		
-		salva(saver, input, rete);
+		salva();
 
 	}
 	
 	/**
+	 * Chiede all'utente il nome di un file dal quale caricare la rete sociale
 	 * 
-	 * 
+	 * @return stringa contenente il nome del file
 	 * 
 	 * */
 	private static String chiediFile()
@@ -88,7 +90,7 @@ public class Interface
 	 * 
 	 * 
 	 * */
-	private static void distribuzione(Tastiera input, ReteSociale rete)
+	private static void distribuzione()
 	{
 		int k=input.nextInt();
 		
@@ -101,7 +103,7 @@ public class Interface
 	 * 
 	 * 
 	 * */
-	private static void aggiungiUtente(Tastiera input, ReteSociale rete)
+	private static void aggiungiUtente()
 	{
 		String nome;
 		String cognome;
@@ -120,7 +122,8 @@ public class Interface
 		}
 		catch (UserException e)
 		{
-			System.out.println ("Errore durante l'aggiunta: "+e);
+			System.err.println ("Errore durante l'aggiunta dell'utente alla rete");
+			System.err.println (e.printStackTrace());
 		}
 				
 	}
@@ -130,7 +133,7 @@ public class Interface
 	 * 
 	 * 
 	 * */
-	public static void rimuoviUtente(Tastiera input, ReteSociale rete)
+	public static void rimuoviUtente()
 	{
 		stampaRete(rete);
 		System.out.println("Inserisci l'id dell'utente da rimuovere");
@@ -148,7 +151,7 @@ public class Interface
 		}
 		catch (UserException e)
 		{
-			System.out.println(e);
+			System.err.println("Errore durante la rimozione dell'utente dalla rete: "+e)
 		}
 		
 	}
@@ -157,7 +160,7 @@ public class Interface
 	 * 
 	 * 
 	 * */
-	public static void modificaAmicizia(Tastiera input, ReteSociale rete)
+	public static void modificaAmicizia()
 	{
 		stampaRete(rete);
 		System.out.println("Seleziona il primo utente");
@@ -201,7 +204,7 @@ public class Interface
 	 * 
 	 * 
 	 * */
-	public static void salva(Saver saver, Tastiera input, ReteSociale rete)
+	public static void salva()
 	{
 		System.out.println("Vuoi salvare la tua rete? 1=sì, 0=no");
 		int scelta= input.nextInt();
@@ -219,7 +222,7 @@ public class Interface
 	 * 
 	 * 
 	 * */
-	private static void stampaRete(ReteSociale rete)
+	private static void stampaRete()
 	{
 		
 		System.out.println("RETE:\n");
@@ -238,7 +241,7 @@ public class Interface
 	 * 
 	 * 
 	 * */
-	private static void superRemove (Tastiera input, ReteSociale rete)
+	private static void superRemove ()
 	{
 		stampaRete(rete);
 		
@@ -268,7 +271,7 @@ public class Interface
 	 * 
 	 * 
 	 * */
-	private static void mostraRelazioni(Tastiera input, ReteSociale rete)
+	private static void mostraRelazioni()
 	{
 		stampaRete(rete);
 		
@@ -320,7 +323,7 @@ public class Interface
 	
 
 	
-	public static void esportaXML(Tastiera input, ReteSociale rete, Saver saver)
+	public static void esportaXML()
 	{
 		System.out.println("Inserisci nome file su cui esportare:");
 		String file_xml=input.nextLine();
@@ -331,40 +334,40 @@ public class Interface
 		}
 		catch(Exception e)
 		{
-			System.out.println("errore esportazione xml "+e);
+			System.err.println("errore esportazione xml "+e);
 		}
 
 	}
 	
-	private static boolean gestisciMenu (Tastiera input, int scelta, ReteSociale rete, Saver saver)
+	private static boolean gestisciMenu (int scelta)
 	{
 		boolean ret=false;
 		
 		switch (scelta)
 		{
 			case 1: System.out.println("hai selezionato: inserire un nuovo utente"); 
-					aggiungiUtente(input, rete);
+					aggiungiUtente();
 					break;
 			case 2: System.out.println("hai selezionato: rimuovere un utente"); 
-					rimuoviUtente(input, rete);
+					rimuoviUtente();
 					break;
 			case 3: System.out.println("hai selezionato: aggiungere o rimuovere una relazione di amicizia"); 
-					modificaAmicizia(input, rete);
+					modificaAmicizia();
 					break;
 			case 4: System.out.println("hai selezionato: stampare rete sociale\n");
-					stampaRete(rete);
+					stampaRete();
 					break;
 			case 5: System.out.println("hai selezionato: SuperRemove\n");
-					superRemove(input, rete);	
+					superRemove();	
 					break;
 			case 6: System.out.println("hai selezionato: visualizzare relazioni\n");
-					mostraRelazioni(input, rete);
+					mostraRelazioni();
 					break;
 			case 7: System.out.println("hai selezionato: visualizzare nodi\n");
 					System.out.println("Dimensione rete: "+rete.getNodi());
 					break;
 			case 8: System.out.println("hai selezionato: visualizzare Degree Distribution della rete\n");
-					distribuzione(input, rete);
+					distribuzione();
 					break;
 			case 9: System.out.println("hai selezionato: visualizzare il cammino più lungo nella rete\n");
 					System.out.println("...: "+rete.Lmax());
@@ -373,7 +376,7 @@ public class Interface
 					
 					break;
 			case 11: System.out.println("hai selezionato: esporta in xml\n");
-					esportaXML(input, rete, saver);
+					esportaXML();
 					break;
 			case 12: System.out.println("Ciao ciao!"); 
 					ret=true; 

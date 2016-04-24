@@ -8,7 +8,7 @@ import java.util.Collections;
  * La classe ReteSociale memorizza informazioni 
  * 
  * 
- * @author Corradini Celestino, mat.
+ * @author Corradini Celestino, mat. 527813
  * @author Mercadante Giulia, mat.
  * @author Pannitto Ludovica , mat. 491094
  * @author Rambelli Giulia, mat.
@@ -490,7 +490,6 @@ public class ReteSociale implements Serializable
 	
 	public void caricaDaXML(Map<Integer, Utente> mapping_persone, Map<Integer, Vector<Integer>> mapping_rete) 
 	{
-		//~ System.out.println("sono qui");
 		
 		int max=0;
 		
@@ -502,6 +501,9 @@ public class ReteSociale implements Serializable
 		persone = mapping_persone;
 		rete = mapping_rete;
 		
+		
+		System.out.println("Attenzione: la rete è stata creata a partire da una fonte esterna.");
+		System.out.println("Per questo alcuni dati potrebbero essere inconsistenti");
 	}
 	
 	// Diametro: il cammino più lungo possibile

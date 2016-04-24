@@ -11,21 +11,31 @@ import org.jdom2.input.SAXBuilder;
 
 
 /**
- * @author Corradini Celestino, mat.
+ * @author Corradini Celestino, mat. 527813
  * @author Mercadante Giulia, mat.
  * @author Pannitto Ludovica , mat. 491094
  * @author Rambelli Giulia, mat.
- * 
+ *
+ *  
  * */
 
+/**
+ * Contiene i metodi per caricare una rete sociale da file.
+ * 
+ * 
+ * */
 public class Loader
 {
 	
-	public Loader(){
-		System.out.println("Creo Loader");
-	}
-	
-	
+	/**
+	 * Carica un oggetto di tipo ReteSociale da file.
+	 * In caso di errore restituisce null.
+	 * 
+	 * @param file_rete nome del file
+	 * 
+	 * @return la rete caricata
+	 * 
+	 * */
 	private ReteSociale loadObject(String file_rete)
 	{
 		ReteSociale rete=null;
@@ -35,30 +45,36 @@ public class Loader
 			ObjectInputStream file_input = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file_rete)));
 			rete = (ReteSociale) file_input.readObject();
 			file_input.close();
+			rete.setFile(file_rete);
 			
 		} catch (FileNotFoundException e) {
 			
-			System.out.println("ATTENZIONE: Il file non esiste");
-			System.out.println("Sara' creato al primo salvataggio\n");
+			System.err.println("ATTENZIONE: Il file non esiste");
+			System.err.println("Sara' creato al primo salvataggio\n");
 			rete= new ReteSociale();
+			rete.setFile(file_rete);
 			
 		} catch (ClassNotFoundException e) {
 
-			System.out.println("ERRORE di lettura: "+e);
-			System.exit(1);
+			System.err.println("ERRORE di lettura: "+e);
 
 		} catch (IOException e) {
 
-			System.out.println("ERRORE di I/O: "+e);
-			System.exit(1);
+			System.err.println("ERRORE di I/O: "+e);
 		}
 		
-		
-		rete.setFile(file_rete);
-	
 		return rete;
 	}
 	
+	/**
+	 * Carica una rete sociale da un file XML.
+	 * In caso di errore restituisce null.
+	 * 
+	 * @param file_rete	nome del file
+	 * 
+	 * @return la rete caricata
+	 * 
+	 * */
 	private ReteSociale loadFromXML(String file_rete)
 	{
 		ReteSociale rete = null;
@@ -125,14 +141,22 @@ public class Loader
 		
 	}
 	
-	
+	/**
+	 * Carica una rete da un file XML o serializzato.
+	 * In caso di errore stampa un messaggio e termina l'esecuzione.
+	 * 
+	 * 
+	 * @param file_rete nome del file
+	 * 
+	 * @return la rete
+	 * 
+	 * */
 	public ReteSociale loadFromFile(String file_rete){
 
 		ReteSociale rete=null;
 	
 		boolean isXML = file_rete.endsWith(".xml");
 		
-	
 		if (isXML)
 		{
 			rete = loadFromXML(file_rete);
@@ -142,8 +166,12 @@ public class Loader
 			rete = loadObject(file_rete);
 		}
 		
+		if (rete == null)
+		{
+			System.err.println ("Errore durante il caricamento della rete da file.")
+			System.exit(1);
+		}
 		return rete;
-		
 	}
 	
 }
