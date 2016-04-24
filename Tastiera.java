@@ -22,18 +22,20 @@ public class Tastiera
 	{
 		boolean scelto=false;
 		int selezione=-1;
+		String str;
 		
 		while (!scelto)
 		{
 			try
 			{
-				selezione=input.nextInt();
+				str = input.next ();
+				selezione = Integer.parseInt(str);
 				scelto=true;
 			}
-			catch(InputMismatchException e)
+			catch(NumberFormatException e)
 			{
 				System.out.println("Non hai inserito un intero, riprova!");
-				input.next();
+				//~ input.next();
 			}
 
 		}
