@@ -292,8 +292,7 @@ public class ReteSociale implements Serializable
 		{
 			throw new UserException ("Utente "+b+" non trovato");
 		}
-		
-		
+			
 		Vector<Integer> amici_di_a = this.rete.get(getId(a));
 		Vector<Integer> amici_di_b = this.rete.get(getId(b));
 		
@@ -307,18 +306,12 @@ public class ReteSociale implements Serializable
 			throw new RelationException ("");
 		}
 		
-		try
-		{
-			amici_di_a.remove(getId(b));
-			amici_di_b.remove(getId(a));
-		}
-		catch (Exception e)
-		{
-			;
-		}
-		
-		
+		amici_di_a.remove((Integer)getId(b));
+		amici_di_b.remove((Integer)getId(a));
+	
 	}
+	
+	
 	/**
 	 * 
 	 * 
