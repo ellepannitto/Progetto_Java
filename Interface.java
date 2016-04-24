@@ -90,6 +90,16 @@ public class Interface
 	 * 
 	 * 
 	 * */
+	private static void cercaUtenti()
+	{
+		System.out.println("Scusaci, ancora da implementare!");
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * */
 	private static void distribuzione()
 	{
 		int k=input.nextInt();
@@ -216,7 +226,16 @@ public class Interface
 			System.out.println("inserisci il nome del file su cui salvare la rete sociale");
 			String file_rete = input.nextLine();
 
-			saver.save(rete, file_rete);
+			boolean isXML = file_rete.endsWith(".xml");
+			
+			if (isXML)
+			{
+				esportaXML(file_rete);
+			}
+			else
+			{
+				saver.save(rete, file_rete);
+			}
 		}
 	}
 	
@@ -326,12 +345,8 @@ public class Interface
 	}
 	
 
-	
-	public static void esportaXML()
+	public static void esportaXML (String file_xml)
 	{
-		System.out.println("Inserisci nome file su cui esportare:");
-		String file_xml=input.nextLine();
-		file_xml+=".xml";
 		try
 		{
 			saver.saveXML(rete, file_xml);	
@@ -340,6 +355,16 @@ public class Interface
 		{
 			System.err.println("errore esportazione xml "+e);
 		}
+	}
+
+	
+	public static void esportaXML()
+	{
+		System.out.println("Inserisci nome file su cui esportare:");
+		String file_xml=input.nextLine();
+		file_xml+=".xml";
+		
+		esportaXML(file_xml);
 
 	}
 	
@@ -377,7 +402,7 @@ public class Interface
 					System.out.println("...: "+rete.Lmax());
 					break;
 			case 10: System.out.println("hai selezionato: ricerca utenti per nome / cognome\n");
-					
+					cercaUtenti();
 					break;
 			case 11: System.out.println("hai selezionato: esporta in xml\n");
 					esportaXML();
@@ -385,7 +410,7 @@ public class Interface
 			case 12: System.out.println("Ciao ciao!"); 
 					ret=true; 
 					break;
-			default: System.out.println("il numero da te selezionato non esiste");
+			default: System.out.println("il numero selezionato non esiste");
 		}
 		
 		input.aspetta();
