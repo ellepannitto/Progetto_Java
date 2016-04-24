@@ -176,9 +176,9 @@ public class Interface
 			utenteDue=rete.getUser(id_utenteDue);
 		
 		
-			System.out.println("Seleziona 0 per aggiungere la relazione\n 1 per rimuovere una relazione");
+			System.out.println("Seleziona:\n - 1 per aggiungere la relazione\n - 0 per rimuovere una relazione");
 			int scelta=input.nextInt ();
-			if (scelta==0)
+			if (scelta==1)
 			{
 				rete.changeRelation(utenteUno, utenteDue);
 				
@@ -191,11 +191,13 @@ public class Interface
 		}
 		catch (UserException e)
 		{
-			;
+			System.err.println("Errore durante la selezione dell'utente");
+			e.printStackTrace();
 		}
 		catch (RelationException e)
 		{
-			;
+			System.err.println("Errore durante la modifica della relazione");
+			e.printStackTrace();
 		}
 	}
 	
@@ -245,9 +247,9 @@ public class Interface
 	{
 		stampaRete();
 		
-		System.out.println("Inserisci id del primo utente:");
+		System.out.println("Inserisci id dell'utente da cui rimuovere le relazioni:");
 		int id_utente_uno=input.nextInt();
-		System.out.println("Inserisci id del secondo utente:");
+		System.out.println("Inserisci id dell'utente di cui non si vuole più sentir parlare:");
 		int id_utente_due=input.nextInt();
 		
 		try{
@@ -257,11 +259,13 @@ public class Interface
 		}
 		catch(UserException e)
 		{
-			;
+			System.err.println("Errore dutante la ricerca dell'utente.");
+			e.printStackTrace();
 		}
 		catch(RelationException e)
 		{
-			;
+			System.err.println("Errore dutante la modifica della relazione.");
+			e.printStackTrace();
 		}
 		
 	}

@@ -307,9 +307,16 @@ public class ReteSociale implements Serializable
 			throw new RelationException ("");
 		}
 		
+		try
+		{
+			amici_di_a.remove(getId(b));
+			amici_di_b.remove(getId(a));
+		}
+		catch (Exception e)
+		{
+			;
+		}
 		
-		amici_di_a.remove(getId(b));
-		amici_di_b.remove(getId(a));
 		
 	}
 	/**
