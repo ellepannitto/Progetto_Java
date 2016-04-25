@@ -6,15 +6,15 @@ import java.util.*;
  * @author Pannitto Ludovica , mat. 491094
  * @author Rambelli Giulia, mat.
  * 
+ * Gestisce le operazioni di input
  * */
-
 public class Tastiera
 {
 	private Scanner input=new Scanner(System.in);
 	
 	
 	/**
-	 * Gestisce l'input di un intero
+	 * @return un intero preso in input
 	 * 
 	 * 
 	 * */
@@ -91,7 +91,7 @@ public class Tastiera
 	
 	/**
 	 * 
-	 * 
+	 * @return un'intera riga presa in input, eventualmente contenente spazi 
 	 * 
 	 * */
 	public String nextLine()

@@ -5,7 +5,7 @@ import java.util.Collections;
 
 /**
  * 
- * La classe ReteSociale memorizza informazioni 
+ * La classe ReteSociale memorizza informazioni riguardanti una rete sociale: gli utenti iscritti e le loro relazioni di amicizia
  * 
  * 
  * @author Corradini Celestino, mat. 527813
@@ -23,27 +23,37 @@ public class ReteSociale implements Serializable
 	
 	private String FileSalvataggio = "";
 	
-	
+	/**
+	 * 
+	 * costruisce una rete sociale vuota (ovvero senza utenti iscritti)
+	 * 
+	 * */
 	public ReteSociale() 
 	{
 		rete = new HashMap<Integer, Vector<Integer>>(); 
 		persone = new HashMap<Integer, Utente>();
 	}
 	
+	/**
+	 * 
+	 * @return il grafo delle relazioni di amicizia
+	 * 
+	 * */
 	public Map<Integer, Vector<Integer>> getRete()
 	{
 		return this.rete;
 	}
 	
+	/**
+	 * 
+	 * @return restituisce una mappa <id, Utente> contenente gli utenti iscritti e il relativo id
+	 * 
+	 * */
 	public Map<Integer, Utente> getUtenti()
 	{
 		return this.persone;
 	}
 	
-	public String getFileSalvataggio ()
-	{
-		return this.FileSalvataggio;
-	}
 	
 	/**
 	 * Setta il file su cui serializzare la rete
@@ -58,7 +68,7 @@ public class ReteSociale implements Serializable
 	
 	
 	/**
-	 * Restituisce il nome del file di salvataggio
+	 * @return il nome del file di salvataggio
 	 * 
 	 * */
 	public String getSavingFile()
@@ -159,6 +169,10 @@ public class ReteSociale implements Serializable
 	
 	/**
 	 * 
+	 * Restituisce l'id di un utente
+	 * @param u utente da cercare
+	 * 
+	 * @return il suo id
 	 * 
 	 * 
 	 * */
@@ -181,6 +195,10 @@ public class ReteSociale implements Serializable
 	
 	/**
 	 * 
+	 * Rimuove un utente dalla rete
+	 * @param u utente da rimuovere
+	 * 
+	 * @throws UserException se l'utente non è presente
 	 * 
 	 * 
 	 * */
@@ -190,7 +208,7 @@ public class ReteSociale implements Serializable
 
 		if (!already_in)
 		{
-			throw new UserException ("elemento "+u+" già presente");
+			throw new UserException ("elemento "+u+" non presente");
 		}
 		else
 		{
@@ -334,6 +352,13 @@ public class ReteSociale implements Serializable
 	
 	/**
 	 * 
+	 * Rimuove la relazione di amicizia fra due utenti
+	 * 
+	 * @param a il primo utente
+	 * @param b il secondo utente
+	 * 
+	 * @throws UserException se uno dei due utenti non è presente nella rete
+	 * @throws RelationException se non esiste una relazione di amicizia fra i due utenti
 	 * 
 	 * */
 	public void removeRelation (Utente a, Utente b) throws UserException, RelationException
@@ -372,6 +397,13 @@ public class ReteSociale implements Serializable
 	
 	/**
 	 * 
+	 * Dati due utenti a, b rimuove dagli amici di a sia b che tutti gli amici di b
+	 * 
+	 * @param a utente da cui rimuovere gli amici
+	 * @param b utente di cui rimuovere gli amici
+	 *  
+	 * @throws UserException se uno dei due utenti non è presente nella rete
+	 * @throws RelationException se non esiste una relazione di amicizia fra i due utenti
 	 * 
 	 * */
 	public void SuperRemove (Utente a, Utente b) throws UserException, RelationException
@@ -392,17 +424,8 @@ public class ReteSociale implements Serializable
 		Vector<Integer> amici_di_a = this.rete.get(getId(a));
 		Vector<Integer> amici_di_b = this.rete.get(getId(b));
 				
-		try
-		{
-			this.removeRelation(a, b);
-		}
-		catch (RelationException e)
-		{
+		this.removeRelation(a, b);
 			
-			;
-		}
-	
-	
 		for (Integer i : amici_di_b)
 		{
 			try
@@ -417,8 +440,16 @@ public class ReteSociale implements Serializable
 			
 		}	
 	}
+	
 	/**
+	 *
+	 * cerca tutti gli utenti ad una specifica distanza da un utente specifico nel grafo delle relazioni  
+	 * @param a utente dal quale far cominciare la ricerca
+	 * @param d distanza dall'utente
 	 * 
+	 * @return l'insieme di utenti richiesto
+	 * 
+	 * @throws UserException se l'utente non esiste
 	 * 
 	 * */
 	public Set<Utente> getRelations (Utente a, int d) throws UserException
@@ -436,10 +467,16 @@ public class ReteSociale implements Serializable
 		
 		return this.converti(id_amici);
 		
-		
 	}
+	
 	/**
 	 * 
+	 * Esegue una ricerca sul grafo delle relazioni, per trovare tutti gli utenti a distanza d da uno specifico utente con id a
+	 * 
+	 * @param a id dell'utente di partenza
+	 * @param d distanza a cui cercare gli amici
+	 * 
+	 * @return l'insieme degli id degli utenti richiesti 
 	 * 
 	 * */
 	private Set<Integer> getRelations_bfs (int a, int d)
@@ -491,6 +528,10 @@ public class ReteSociale implements Serializable
 	
 	/**
 	 * 
+	 * converte un insieme di id nell'insieme di utenti corrispondente
+	 * @param lista insieme di id
+	 * 
+	 * @return insieme di utenti con id corrispondenti a quelli passati come parametro
 	 * 
 	 * */
 	private Set<Utente> converti (Set<Integer> lista)
@@ -505,9 +546,10 @@ public class ReteSociale implements Serializable
 		
 		return ret;
 	}
+	
 	/**
 	 * 
-	 * 
+	 * @return il numero di utenti nella rete
 	 * 
 	 * */
 	public int getNodi () 
@@ -547,7 +589,15 @@ public class ReteSociale implements Serializable
 		return (N*(N-1))/2;
 	}
 	
-	public void caricaDaXML(Map<Integer, Utente> mapping_persone, Map<Integer, Vector<Integer>> mapping_rete) 
+	/**
+	 * 
+	 * Carica la rete dalla sua rappresentazione a grafo
+	 * 
+	 * @param mapping_persone lista di nodi dell grafo delle relazioni, ovvero lista di utenti 
+	 * @param mapping_rete lista di archi dell grafo delle relazioni, ovvero lista di relazioni di amicizia fra utenti 
+	 * 
+	 * */
+	public void caricaDaGrafo (Map<Integer, Utente> mapping_persone, Map<Integer, Vector<Integer>> mapping_rete) 
 	{
 		
 		int max=0;

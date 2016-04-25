@@ -8,10 +8,18 @@ import java.util.Map.Entry;
  * @author Pannitto Ludovica , mat. 491094
  * @author Rambelli Giulia, mat.
  * 
+ * contiene i metodi per memorizzare la rete su un file XML o serializzato
+ * 
  * */
-
 public class Saver
 {
+	/**
+	 * 
+	 * salva la rete serializzandola  sul file specificato dalla rete stessa
+	 * 
+	 * @param rete rete da salvare
+	 * 
+	 * */
 	public void save(ReteSociale rete)
 	{
 		String file = rete.getSavingFile();
@@ -19,6 +27,14 @@ public class Saver
 		save(rete, file);
 	}
 	
+	/**
+	 * 
+	 * salva la rete serializzandola sul file specificato come parametro
+	 * 
+	 * @param rete rete da salvare
+	 * @param file_salvataggio nome del file su cui salvare
+	 * 
+	 * */
 	public void save(ReteSociale rete, String file_salvataggio)
 	{
 		try {
@@ -33,9 +49,29 @@ public class Saver
 		}
 	}
 	
-	public void saveXML(ReteSociale rete, String file_xml) throws FileNotFoundException, UnsupportedEncodingException
+	/**
+	 * 
+	 * Salva la rete su un file XML
+	 * 
+	 * @param rete rete da salvare
+	 * @param file_xml nome del file su cui salvare 
+	 * 
+	 * @throws FileNotFoundException se il file non esiste ma non può essere creato, oppure se si verifica qualche altro errore
+	 *
+	 *  */
+	public void saveXML(ReteSociale rete, String file_xml) throws FileNotFoundException
 	{
-		PrintWriter writer = new PrintWriter(file_xml, "UTF-8");
+		
+		PrintWriter writer = null;
+		try
+		{
+			writer = new PrintWriter(file_xml, "UTF-8");
+		} catch (UnsupportedEncodingException e )
+		{
+			System.out.println (e);
+			e.printStackTrace();
+			System.exit (1);
+		}
 		
 		Map<Integer, Vector<Integer>> grafo = rete.getRete();
 		Map<Integer, Utente> persone = rete.getUtenti();

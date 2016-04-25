@@ -130,7 +130,7 @@ public class Loader
 			
 			rete = new ReteSociale();
 			
-			rete.caricaDaXML ( mapping_utenti, mapping_rete );
+			rete.caricaDaGrafo ( mapping_utenti, mapping_rete );
 			
 		}
 		catch(JDOMException e)

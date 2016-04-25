@@ -8,6 +8,9 @@ import org.jdom2.JDOMException;
  * @author Pannitto Ludovica , mat. 491094
  * @author Rambelli Giulia, mat.
  * 
+ * Gestisce una rete sociale, dando la possibilità di inserire utenti, relazioni di amicizia, visualizzarla...
+ * 
+ * 
  * */
 public class Interface
 {
@@ -19,7 +22,10 @@ public class Interface
 	
 	/**
 	 * 
+	 * Controlla un ciclo di esecuzione ad ogni passo del quale viene chiesto gentilmente all'utente cosa vuole fare, e si compie un'azione diversa in base alla risposta.
+	 * alla fine del ciclo è possibile salvare la rete su un file.
 	 * 
+	 * @param il primo argomento (opzionale) della riga di comando è il nome del file dal quale viene eventualmente caricata e sul quale verrà salvata la rete sociale 
 	 * 
 	 * */
 	public static void main(String[] args) 
@@ -211,33 +217,39 @@ public class Interface
 		System.out.println("Vuoi salvare la tua rete? 0=no, 1=salva..., 2=salva come...");
 		int scelta= input.nextInt();
 		String file_rete = "";
+		boolean salva = false;
 		
 		if (scelta == 1)
 		{	
-			file_rete = rete.getFileSalvataggio();
+			file_rete = rete.getSavingFile();
 			System.out.println("Salvo su: "+file_rete);
-			
+			salva=true;
 		}
 		else if (scelta == 2)
 		{
-			
+			System.out.println ("Inserisci nome del file su cui salvare:");
 			file_rete = input.nextLine();
+			salva=true;
 		}
 		
-		boolean isXML = file_rete.endsWith(".xml");
+		if (salva)
+		{
+			boolean isXML = file_rete.endsWith(".xml");
 			
-		if (isXML)
-		{
-			esportaXML(file_rete);
+			if (isXML)
+			{
+				esportaXML(file_rete);
+			}
+			else
+			{
+				saver.save(rete, file_rete);
+			}
 		}
-		else
-		{
-			saver.save(rete, file_rete);
-		}
+		
 	}
 	
 	/**
-	 * stampa la rete sociale
+	 * visualizza la rete sociale
 	 * 
 	 * */
 	private static void stampaRete()
@@ -257,6 +269,7 @@ public class Interface
 	
 	/**
 	 * 
+	 * Esegue l'operazione SuperRemove, che rimuove dagli amici di un utente un altro utente e tutti i suoi amici  
 	 * 
 	 * */
 	private static void superRemove ()
@@ -288,7 +301,7 @@ public class Interface
 	
 	/**
 	 * 
-	 * 
+	 * Visualizza le relazioni a una certa distanza di un utente
 	 * 
 	 * */
 	private static void mostraRelazioni()
@@ -344,6 +357,9 @@ public class Interface
 
 	/**
 	 * 
+	 * Salva la rete su un file xml
+	 * 
+	 * @param file_xml il nome del file
 	 * 
 	 * */
 	public static void esportaXML (String file_xml)
@@ -361,6 +377,8 @@ public class Interface
 
 	/**
 	 * 
+	 * Salva la rete su un file xml.
+	 * Chiede il nome del file all'utente 
 	 * 
 	 * */
 	public static void esportaXML()
@@ -381,6 +399,11 @@ public class Interface
 	
 	/**
 	 * 
+	 * gestisce la scelta dell'utente, eseguendo la funzione appropriata
+	 * @param scelta la scelta dell'utente
+	 * 
+	 * @return true se l'utente ha deciso di uscire
+	 * @return false altrimenti
 	 * 
 	 * */
 	private static boolean gestisciMenu (int scelta)
