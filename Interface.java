@@ -86,7 +86,7 @@ public class Interface
 	}
 	
 	/**
-	 * 
+	 * Da implementare: stampa la rete sociale limitatamente agli utenti che rispettano i criteri della ricerca
 	 * 
 	 * 
 	 * */
@@ -96,7 +96,7 @@ public class Interface
 	}
 	
 	/**
-	 * 
+	 * #########DA COMMENTARE
 	 * 
 	 * 
 	 * */
@@ -109,7 +109,7 @@ public class Interface
 	}
 	
 	/**
-	 * 
+	 * Aggiunge un utente alla rete sociale.
 	 * 
 	 * 
 	 * */
@@ -135,11 +135,10 @@ public class Interface
 			System.err.println ("Errore durante l'aggiunta dell'utente alla rete");
 			e.printStackTrace();
 		}
-				
 	}
 	
 	/**
-	 * 
+	 * Rimuove un utente dalla rete sociale.
 	 * 
 	 * 
 	 * */
@@ -161,12 +160,14 @@ public class Interface
 		}
 		catch (UserException e)
 		{
-			System.err.println("Errore durante la rimozione dell'utente dalla rete: "+e);
+			System.err.println("Errore durante la rimozione dell'utente dalla rete");
+			e.printStackTrace();
 		}
 		
 	}
 	
 	/**
+	 * Aggiunge o rimuove la relazione di amicizia tra due utenti della rete sociale.
 	 * 
 	 * 
 	 * */
@@ -185,19 +186,8 @@ public class Interface
 			utenteUno=rete.getUser(id_utenteUno);
 			utenteDue=rete.getUser(id_utenteDue);
 		
-		
-			System.out.println("Seleziona:\n - 1 per aggiungere la relazione\n - 0 per rimuovere una relazione");
-			int scelta=input.nextInt ();
-			if (scelta==1)
-			{
-				rete.changeRelation(utenteUno, utenteDue);
+			rete.changeRelation(utenteUno, utenteDue);
 				
-			} 
-			else {
-				
-				rete.changeRelation(utenteUno, utenteDue, false);
-				
-			}
 		}
 		catch (UserException e)
 		{
@@ -212,35 +202,42 @@ public class Interface
 	}
 	
 	/**
-	 * 
+	 * Salva la rete sociale su file.
 	 * 
 	 * 
 	 * */
 	public static void salva()
 	{
-		System.out.println("Vuoi salvare la tua rete? 1=sì, 0=no");
+		System.out.println("Vuoi salvare la tua rete? 0=no, 1=salva..., 2=salva come...");
 		int scelta= input.nextInt();
+		String file_rete = "";
 		
-		if (scelta==1)
-		{
-			System.out.println("inserisci il nome del file su cui salvare la rete sociale");
-			String file_rete = input.nextLine();
-
-			boolean isXML = file_rete.endsWith(".xml");
+		if (scelta == 1)
+		{	
+			file_rete = rete.getFileSalvataggio();
+			System.out.println("Salvo su: "+file_rete);
 			
-			if (isXML)
-			{
-				esportaXML(file_rete);
-			}
-			else
-			{
-				saver.save(rete, file_rete);
-			}
+		}
+		else if (scelta == 2)
+		{
+			
+			file_rete = input.nextLine();
+		}
+		
+		boolean isXML = file_rete.endsWith(".xml");
+			
+		if (isXML)
+		{
+			esportaXML(file_rete);
+		}
+		else
+		{
+			saver.save(rete, file_rete);
 		}
 	}
 	
 	/**
-	 * 
+	 * stampa la rete sociale
 	 * 
 	 * */
 	private static void stampaRete()
@@ -309,19 +306,19 @@ public class Interface
 		try
 		{
 			Utente u = rete.getUser(i);
-		
 			ret=rete.getRelations(u, d);
 		}
 		catch(UserException e)
 		{
-			;
+			System.err.println("Errore durante la selezione dell'utente.");
+			e.printStackTrace();
 		}
 		
 		System.out.println(ret);
 	}
 	
 	/**
-	 * 
+	 * Resetta la console tenendo in alto il menu di scelta.
 	 * 
 	 * */
 	private static void resetConsole()
@@ -345,6 +342,10 @@ public class Interface
 	}
 	
 
+	/**
+	 * 
+	 * 
+	 * */
 	public static void esportaXML (String file_xml)
 	{
 		try
@@ -353,21 +354,35 @@ public class Interface
 		}
 		catch(Exception e)
 		{
-			System.err.println("errore esportazione xml "+e);
+			System.err.println("errore esportazione xml.");
+			e.printStackTrace();
 		}
 	}
 
-	
+	/**
+	 * 
+	 * 
+	 * */
 	public static void esportaXML()
 	{
 		System.out.println("Inserisci nome file su cui esportare:");
 		String file_xml=input.nextLine();
-		file_xml+=".xml";
+		boolean isXML = file_xml.endsWith(".xml");
+		
+		if (!isXML)
+		{
+			file_xml+=".xml";
+			
+		}
 		
 		esportaXML(file_xml);
 
 	}
 	
+	/**
+	 * 
+	 * 
+	 * */
 	private static boolean gestisciMenu (int scelta)
 	{
 		boolean ret=false;
@@ -416,7 +431,6 @@ public class Interface
 		input.aspetta();
 		
 		return ret;
-		
 	}
 	
 }

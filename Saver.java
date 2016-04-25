@@ -28,7 +28,8 @@ public class Saver
 			file_output.close();
 			
 		} catch (IOException e) {
-			System.out.println("ERRORE di I/O: "+e);
+			System.out.println("ERRORE di I/O.");
+			e.printStackTrace();
 		}
 	}
 	

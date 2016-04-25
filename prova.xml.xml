@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<ReteSociale>
+	<Utente id='0'>
+		<nome>lucio</nome>
+		<cognome>messina</cognome>
+		<amici>
+			<id>1</id>
+			<id>4</id>
+			<id>2</id>
+			<id>5</id>
+		</amici>
+	</Utente>
+	<Utente id='1'>
+		<nome>ludovica</nome>
+		<cognome>pannitto</cognome>
+		<amici>
+			<id>0</id>
+		</amici>
+	</Utente>
+	<Utente id='2'>
+		<nome>pippi</nome>
+		<cognome>calzelunghe</cognome>
+		<amici>
+			<id>0</id>
+		</amici>
+	</Utente>
+	<Utente id='3'>
+		<nome>cappuccetto</nome>
+		<cognome>rosso</cognome>
+		<amici>
+		</amici>
+	</Utente>
+	<Utente id='4'>
+		<nome>cappuccetto</nome>
+		<cognome>blu</cognome>
+		<amici>
+			<id>0</id>
+		</amici>
+	</Utente>
+	<Utente id='5'>
+		<nome>cappuccetto</nome>
+		<cognome>verde</cognome>
+		<amici>
+			<id>0</id>
+		</amici>
+	</Utente>
+	<Utente id='9'>
+		<nome>barba</nome>
+		<cognome>papà</cognome>
+		<amici>
+		</amici>
+	</Utente>
+	<Utente id='10'>
+		<nome>riccioli</nome>
+		<cognome>d'oro</cognome>
+		<amici>
+		</amici>
+	</Utente>
+</ReteSociale>

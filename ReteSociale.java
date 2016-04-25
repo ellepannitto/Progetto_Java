@@ -40,6 +40,11 @@ public class ReteSociale implements Serializable
 		return this.persone;
 	}
 	
+	public String getFileSalvataggio ()
+	{
+		return this.FileSalvataggio;
+	}
+	
 	/**
 	 * Setta il file su cui serializzare la rete
 	 * 
@@ -83,7 +88,7 @@ public class ReteSociale implements Serializable
 		    Vector<Integer> amici = entry.getValue();
 		    for (int i : amici) {
 				Utente u=persone.get(i);
-		    	output = output +"("+i+") "+u;
+		    	output = output +"  ("+i+") "+u;
 		    }
 		    output = output + "\n";
 		}
@@ -202,7 +207,8 @@ public class ReteSociale implements Serializable
 				}
 				catch (RelationException e)
 				{
-					;
+					System.err.println("Gli utenti non sono amici");
+					e.printStackTrace();
 				}
 			}
 			
@@ -224,7 +230,7 @@ public class ReteSociale implements Serializable
 	 * @throws RelationException se i due utenti sono già amici
 	 * 
 	 * */
-	public void changeRelation (Utente a, Utente b) throws UserException, RelationException
+	public void addRelation (Utente a, Utente b) throws UserException, RelationException
 	{
 		boolean a_already_in = this.persone.containsValue(a);
 		boolean b_already_in = this.persone.containsValue(b);
@@ -258,20 +264,72 @@ public class ReteSociale implements Serializable
 	}
 	
 	/**
+	 * Modifica la relazione di amicizia tra due utenti: 
+	 * 	- se i due utenti non sono amici, aggiunge la relazione di amicizia
+	 *  - se i due utenti sono già amici, rimuove la relazione
 	 * 
+	 * 
+	 * @throws UserException
+	 * @throws RelationException
 	 * 
 	 * */
-	public void changeRelation (Utente a, Utente b, boolean add) throws UserException, RelationException
+	public void changeRelation (Utente a, Utente b) throws UserException, RelationException
 	{
+		boolean add = !checkRelation (a, b);
+		
 		if (add)
 		{
-			this.changeRelation(a, b);
+			this.addRelation(a, b);
+			System.out.println ("Aggiunta relazione tra '"+a+"' e '"+b+"'.");
 		}
 		else
 		{
 			this.removeRelation(a, b);
+			System.out.println ("Rimossa relazione tra '"+a+"' e '"+b+"'.");
 			
 		}	
+	}
+	
+	/**
+	 * Controlla se i due utenti sono amici.
+	 * 
+	 * @param a Utente
+	 * @param b Utente
+	 * 
+	 * @return false se i due utenti non sono amici
+	 * 			true altrimenti
+	 * 
+	 * @throws UserException se uno dei due utenti non appartiene alla rete
+	 * 
+	 * */	
+	private boolean checkRelation (Utente a, Utente b) throws UserException
+	{
+		boolean ret = true;
+		
+		boolean a_already_in = this.persone.containsValue(a);
+		boolean b_already_in = this.persone.containsValue(b);
+			
+		if (!a_already_in) 
+		{
+			throw new UserException ("Utente "+a+" non trovato");
+		}
+		
+		if (!b_already_in )
+		{
+			throw new UserException ("Utente "+b+" non trovato");
+		}
+		
+		Vector<Integer> amici_di_a = this.rete.get(getId(a));
+		Vector<Integer> amici_di_b = this.rete.get(getId(b));
+		
+		if (!amici_di_a.contains(getId(b)) && !amici_di_b.contains(getId(a)))
+		{
+			ret = false;
+		}
+		
+		return ret;
+
+
 	}
 	
 	/**
@@ -340,6 +398,7 @@ public class ReteSociale implements Serializable
 		}
 		catch (RelationException e)
 		{
+			
 			;
 		}
 	
