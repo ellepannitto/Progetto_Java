@@ -225,8 +225,9 @@ public class ReteSociale implements Serializable
 				}
 				catch (RelationException e)
 				{
-					System.err.println("Gli utenti non sono amici");
+					System.err.println("Rete inconsistente: gli utenti "+i+" e "+u+" non sono amici");
 					e.printStackTrace();
+					System.exit (1);
 				}
 			}
 			

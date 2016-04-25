@@ -44,9 +44,12 @@ public class Saver
 			file_output.close();
 			
 		} catch (IOException e) {
-			System.out.println("ERRORE di I/O.");
+			System.err.println("ERRORE di I/O.");
 			e.printStackTrace();
+			System.exit (1);
 		}
+		
+		System.out.println ("Rete salvata su "+file_salvataggio);
 	}
 	
 	/**
@@ -68,7 +71,7 @@ public class Saver
 			writer = new PrintWriter(file_xml, "UTF-8");
 		} catch (UnsupportedEncodingException e )
 		{
-			System.out.println (e);
+			System.err.println (e);
 			e.printStackTrace();
 			System.exit (1);
 		}
@@ -102,6 +105,9 @@ public class Saver
 		}
 		writer.println("</ReteSociale>");
 		writer.close();
+		
+		System.out.println ("Rete salvata su "+file_xml);
+
 	}
 	
 }

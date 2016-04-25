@@ -1,17 +1,3 @@
 <?xml version="1.0"?>
 <ReteSociale>
-	<Utente id='0'>
-		<nome>lu</nome>
-		<cognome>me</cognome>
-		<amici>
-			<id>1</id>
-		</amici>
-	</Utente>
-	<Utente id='1'>
-		<nome>ca</nome>
-		<cognome>ne</cognome>
-		<amici>
-			<id>0</id>
-		</amici>
-	</Utente>
 </ReteSociale>

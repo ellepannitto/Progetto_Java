@@ -49,23 +49,23 @@ public class Loader
 			
 		} catch (FileNotFoundException e) {
 			
-			System.err.println("ATTENZIONE: Il file non esiste.");
-			System.err.println("Sara' creato al primo salvataggio.");
-			e.printStackTrace();
+			System.out.println("ATTENZIONE: Il file non esiste.");
+			System.out.println("Sara' creato al primo salvataggio.");
 			
 			rete= new ReteSociale();
 			rete.setFile(file_rete);
 			
 		} catch (ClassNotFoundException e) {
 
-			System.err.println("ERRORE di lettura.");
+			System.err.println("ERRORE: classe non trovata.");
 			e.printStackTrace();
+			System.exit (1);
 
 		} catch (IOException e) {
 			
 			System.err.println("ERRORE di I/O.");
 			e.printStackTrace();
-			
+			System.exit (1);			
 		}
 		
 		return rete;
@@ -135,13 +135,15 @@ public class Loader
 		}
 		catch(JDOMException e)
 		{
-			System.out.println ("Errore durante il parsing XML.");
-			e.printStackTrace();
+			System.err.println ("Errore durante il parsing XML.");
+			System.err.println (e);
+			System.exit (1);
 		}
 		catch(IOException ioe)
 		{
-			System.out.println ("Errore durante l'apertura del file.");
-			ioe.printStackTrace();
+			System.err.println ("Errore durante l'apertura del file.");
+			System.err.println (ioe);
+			System.exit (1);
 		}
 		
 		return rete;

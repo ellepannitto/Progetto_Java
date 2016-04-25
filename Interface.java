@@ -85,7 +85,7 @@ public class Interface
 		String nome_file="";
 		if (selezione==1)
 		{
-			nome_file=input.next();
+			nome_file=input.nextLine();
 		}
 		
 		return nome_file;
@@ -138,8 +138,7 @@ public class Interface
 		}
 		catch (UserException e)
 		{
-			System.err.println ("Errore durante l'aggiunta dell'utente alla rete");
-			e.printStackTrace();
+			System.out.println ("Utente già presente...");
 		}
 	}
 	
@@ -166,7 +165,7 @@ public class Interface
 		}
 		catch (UserException e)
 		{
-			System.err.println("Errore durante la rimozione dell'utente dalla rete");
+			System.out.println("Errore durante la rimozione dell'utente dalla rete");
 			e.printStackTrace();
 		}
 		
@@ -197,12 +196,12 @@ public class Interface
 		}
 		catch (UserException e)
 		{
-			System.err.println("Errore durante la selezione dell'utente");
+			System.out.println("Errore durante la selezione dell'utente");
 			e.printStackTrace();
 		}
 		catch (RelationException e)
 		{
-			System.err.println("Errore durante la modifica della relazione");
+			System.out.println("Errore durante la modifica della relazione");
 			e.printStackTrace();
 		}
 	}
@@ -288,12 +287,12 @@ public class Interface
 		}
 		catch(UserException e)
 		{
-			System.err.println("Errore dutante la ricerca dell'utente.");
+			System.out.println("Errore dutante la ricerca dell'utente.");
 			e.printStackTrace();
 		}
 		catch(RelationException e)
 		{
-			System.err.println("Errore dutante la modifica della relazione.");
+			System.out.println("Errore dutante la modifica della relazione.");
 			e.printStackTrace();
 		}
 		
@@ -323,8 +322,8 @@ public class Interface
 		}
 		catch(UserException e)
 		{
-			System.err.println("Errore durante la selezione dell'utente.");
-			e.printStackTrace();
+			System.out.println("Errore durante la selezione dell'utente.");
+			System.out.println("Utente con id "+i+"Non presente");
 		}
 		
 		System.out.println(ret);
@@ -372,6 +371,7 @@ public class Interface
 		{
 			System.err.println("errore esportazione xml.");
 			e.printStackTrace();
+			System.exit (1);
 		}
 	}
 
