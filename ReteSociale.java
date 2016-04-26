@@ -106,6 +106,32 @@ public class ReteSociale implements Serializable
 		return output;	
 	}
 	
+	public String toString (Map<Integer, Vector<Integer>> sottorete)
+	{
+		String output = "";
+		
+		Iterator<Entry<Integer, Vector<Integer>>> it = sottorete.entrySet().iterator();
+		 
+		
+		while (it.hasNext()) {
+		
+		    Map.Entry<Integer, Vector<Integer>> entry = it.next();
+		    
+		
+		    output = output +"("+entry.getKey()+") "+ persone.get(entry.getKey()) + "\t";
+		    output = output + "Amici =";
+		    Vector<Integer> amici = entry.getValue();
+		    for (int i : amici) {
+				Utente u=persone.get(i);
+		    	output = output +"  ("+i+") "+u;
+		    }
+		    output = output + "\n";
+		}
+		
+		return output;
+		
+	}
+	
 	
 	/**
 	 * Restituisce un utente a partire dal suo id all'interno della rete
@@ -548,6 +574,14 @@ public class ReteSociale implements Serializable
 		return ret;
 	}
 	
+	public boolean isEmpty()
+	{
+		if (rete.size()>0)
+			return false;
+		else
+			return true;
+	}
+	
 	/**
 	 * 
 	 * @return il numero di utenti nella rete
@@ -556,6 +590,18 @@ public class ReteSociale implements Serializable
 	public int getNodi () 
 	{
 		return rete.size();
+	}
+	
+	public int getArchi ()
+	{
+		int L = 0;
+		Iterator<Integer> keySetIterator = rete.keySet().iterator();
+		while (keySetIterator.hasNext())
+		{
+		    Integer key1 = keySetIterator.next();
+		    L += rete.get(key1).size();
+		}
+		return L/2;
 	}
 		
 	/**
@@ -578,8 +624,13 @@ public class ReteSociale implements Serializable
 			return Nk / getNodi();
 	}
 
-	// Average degree = 2L/N (L=num archi, N = num nodi)
-	
+	public double avg_degree()
+	{
+		double N = this.getNodi();
+		double L = this.getArchi();
+		
+		return (2*L)/N;
+	}
 	/**
 	 * Lmax indica il numero massimo di link che una rete di N nodi può avere 
 	 * 
@@ -588,6 +639,17 @@ public class ReteSociale implements Serializable
 	public double Lmax () {
 		int N = getNodi();
 		return (N*(N-1))/2;
+	}
+	
+	public double density()
+	{
+		double neighbors = 0;
+		Iterator<Integer> keySetIterator = rete.keySet().iterator();
+		while (keySetIterator.hasNext()) {
+		    Integer key1 = keySetIterator.next();
+		    neighbors += rete.get(key1).size(); 
+		}
+			return neighbors / (double) getNodi();
 	}
 	
 	/**
@@ -616,51 +678,50 @@ public class ReteSociale implements Serializable
 		System.out.println("Per questo alcuni dati potrebbero essere inconsistenti");
 	}
 	
-	// Diametro: il cammino più lungo possibile
-	// Average distance = (1/Lmax)* S_d<i,j>
-	// Clustering coefficient = 
-	
-	
-	/*
-	public boolean salva() {
-		//if (modifiche) { // salva solo se necessario (se ci sono modifiche)				
-			try {
-				ObjectOutputStream file_output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFileRete)));
-				// salva l'intero oggetto nel file
-				file_output.writeObject(rete);
-				file_output.close();
-				file_output = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFileUtenti)));
-				// salva l'intero oggetto nel file
-				file_output.writeObject(persone);
-				file_output.close();
-				modifiche = false; // le modifiche sono state salvate
-				return true;
-			} catch (IOException e) {
-				System.out.println("ERRORE di I/O");
-				System.out.println(e);
-				return false;
-			}	
-		//} else return true;
-	}
+	public String stampa_sottorete (String ricerca)
+	{
+		String output = "";
 		
-	public boolean salva(String file_rete, String file_utenti)
-	{
-		this.nomeFileRete = file_rete;
-		this.nomeFileUtenti = file_utenti;
-			
-		return this.salva();
-	}*/
-	
-	/*public String toString()
-	{
-		String s="";
-		for (Map.Entry<Integer, Utente> pair : this.persone.entrySet())
+		Vector <String> parts = new Vector<String> (Arrays.asList(ricerca.split(" ")));
+		
+		Set <Integer> find = new HashSet <Integer> ();
+		
+		Iterator<Integer> keySetIterator = rete.keySet().iterator();
+		while (keySetIterator.hasNext()) 
 		{
-			s+= pair.getKey() + " " + pair.getValue() + "\n";
+		    Integer id = keySetIterator.next();
+		    
+		    Utente u = this.persone.get(id);
+		    
+		    Vector <String> nome = new Vector<String> (Arrays.asList(u.getNome().split(" ")));
+		    Vector <String> cognome = new Vector<String> (Arrays.asList(u.getCognome().split(" ")));
+		    
+		    for (String s: parts)
+		    {
+				if (nome.contains(s) || cognome.contains(s))
+				{
+					find.add(id);
+				}
+			}
+		}
+		    
+		if (!find.isEmpty())
+		{
+			Map <Integer, Vector<Integer>> sottorete = new HashMap<Integer, Vector<Integer>> ();
+			
+			for (Integer i: find)
+			{
+				sottorete.put(i, this.rete.get(i));	
+			}
+			output = toString(sottorete);
+			
+		}
+		else
+		{
+			output = "Nessun risultato per la tua ricerca";
 		}
 		
-		s+=this.rete;
-		return s;
-		
-	}*/
+		return output;
+	}
+	
 }

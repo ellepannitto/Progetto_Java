@@ -1,12 +1,13 @@
 import java.util.*;
 import org.jdom2.JDOMException;
+import java.io.*;
 
 
 /**
  * @author Corradini Celestino, mat. 527813
  * @author Mercadante Giulia, mat.
  * @author Pannitto Ludovica , mat. 491094
- * @author Rambelli Giulia, mat.
+ * @author Rambelli Giulia, mat. 495544
  * 
  * Gestisce una rete sociale, dando la possibilità di inserire utenti, relazioni di amicizia, visualizzarla...
  * 
@@ -85,8 +86,27 @@ public class Interface
 		String nome_file="";
 		if (selezione==1)
 		{
-			System.out.println ("Inserisci il nome del file da cui caricare la rete:")
-			nome_file=input.nextLine();
+			File cartella_corrente = new File (".");
+			File[] fs = cartella_corrente.listFiles();
+			List<String> fs_xml = new ArrayList<String>();
+			for (File i : fs) {	
+				if (i.isFile() && !i.isHidden()){
+					fs_xml.add(i.getName());
+					System.out.println(i.getName());
+				}
+				
+			}
+			if (fs_xml.size() >0)
+			{
+				System.out.println("Inserisci il nome del file da cui caricare la rete tra quelli presenti nella corrente directory (vedi lista sovrastante):");
+			}
+			else
+			{
+				System.out.println("Nessun file presente nella directory corrente. Inserisci il path relativo:");
+			}
+			
+			nome_file = input.nextLine();
+			
 		}
 		
 		return nome_file;
@@ -99,11 +119,16 @@ public class Interface
 	 * */
 	private static void cercaUtenti()
 	{
-		System.out.println("Scusaci, ancora da implementare!");
+		System.out.println("Inserisci la stringa da cercare (può contenere spazi!)");
+		String da_cercare = input.nextAlphabetic();
+		
+		String s = rete.stampa_sottorete(da_cercare);
+		
+		System.out.println (s);
 	}
 	
 	/**
-	 * #########DA COMMENTARE
+	 * Stampa la probabilità di avere un nodo di grado <k>
 	 * 
 	 * 
 	 * */
@@ -126,10 +151,10 @@ public class Interface
 		String cognome;
 		
 		System.out.println("Inserisci il nome del nuovo utente:");
-		nome=input.nextLine();
+		nome=input.nextAlphabetic();
 		
 		System.out.println("Inserisci il cognome del nuovo utente:");
-		cognome=input.nextLine();
+		cognome=input.nextAlphabetic();
 		
 		Utente u=new Utente(nome, cognome);
 		
@@ -167,7 +192,7 @@ public class Interface
 		catch (UserException e)
 		{
 			System.out.println("Errore durante la rimozione dell'utente dalla rete");
-			e.printStackTrace();
+			//~ e.printStackTrace();
 		}
 		
 	}
@@ -198,12 +223,12 @@ public class Interface
 		catch (UserException e)
 		{
 			System.out.println("Errore durante la selezione dell'utente");
-			e.printStackTrace();
+			//~ e.printStackTrace();
 		}
 		catch (RelationException e)
 		{
 			System.out.println("Errore durante la modifica della relazione");
-			e.printStackTrace();
+			//~ e.printStackTrace();
 		}
 	}
 	
@@ -289,12 +314,12 @@ public class Interface
 		catch(UserException e)
 		{
 			System.out.println("Errore dutante la ricerca dell'utente.");
-			e.printStackTrace();
+			//~ e.printStackTrace();
 		}
 		catch(RelationException e)
 		{
 			System.out.println("Errore dutante la modifica della relazione.");
-			e.printStackTrace();
+			//~ e.printStackTrace();
 		}
 		
 	}
@@ -330,12 +355,22 @@ public class Interface
 		System.out.println(ret);
 	}
 	
+	private static void mostraStatistiche()
+	{
+		System.out.println("Nodi: " + rete.getNodi());
+		System.out.println("Archi: " + rete.getArchi());
+		System.out.println("Average degree: " + rete.avg_degree());
+		System.out.println("Cammino più lungo possibile: "+rete.Lmax());
+		System.out.println("Network density: " + rete.density());
+	}
+	
 	/**
 	 * Resetta la console tenendo in alto il menu di scelta.
 	 * 
 	 * */
 	private static void resetConsole()
 	{
+		//Per pulire la console su Linux
 		System.out.println("\033[H\033[2J");
 		System.out.flush();
 			
@@ -346,12 +381,11 @@ public class Interface
 							"- 4 per stampare la rete sociale\n"+
 							"- 5 per effetturare l'operazione SuperRemove\n"+
 							"- 6 per vedere le relazioni a distanza d da un utente\n"+
-							"- 7 getNodi\n"+
+							"- 7 statistiche\n"+
 							"- 8 getDegreeDistribution\n"+
-							"- 9 LMax\n"+
-							"- 10 per cercare utenti per nome / cognome\n"+
-							"- 11 per salvare la rete in xml\n"+
-							"- 12 per uscire\n");
+							"- 9 per cercare utenti per nome / cognome\n"+
+							"- 10 per salvare la rete in xml\n"+
+							"- 11 per uscire\n");
 	}
 	
 
@@ -409,7 +443,10 @@ public class Interface
 	 * */
 	private static boolean gestisciMenu (int scelta)
 	{
+		String not_selectable = "La rete è vuota, opzione non selezionabile";
 		boolean ret=false;
+		
+		boolean rete_vuota = rete.isEmpty();
 		
 		switch (scelta)
 		{
@@ -417,36 +454,40 @@ public class Interface
 					aggiungiUtente();
 					break;
 			case 2: System.out.println("hai selezionato: rimuovere un utente"); 
-					rimuoviUtente();
+					if (!rete_vuota) rimuoviUtente();
+					else System.out.println(not_selectable);
 					break;
-			case 3: System.out.println("hai selezionato: aggiungere o rimuovere una relazione di amicizia"); 
-					modificaAmicizia();
+			case 3: System.out.println("hai selezionato: aggiungere o rimuovere una relazione di amicizia");
+					if (!rete_vuota) modificaAmicizia();
+					else System.out.println(not_selectable);
 					break;
 			case 4: System.out.println("hai selezionato: stampare rete sociale\n");
 					stampaRete();
 					break;
 			case 5: System.out.println("hai selezionato: SuperRemove\n");
-					superRemove();	
+					if (!rete_vuota) superRemove();
+					else System.out.println(not_selectable);	
 					break;
 			case 6: System.out.println("hai selezionato: visualizzare relazioni\n");
-					mostraRelazioni();
+					if (!rete_vuota) mostraRelazioni();
+					else System.out.println(not_selectable);
 					break;
-			case 7: System.out.println("hai selezionato: visualizzare nodi\n");
-					System.out.println("Dimensione rete: "+rete.getNodi());
+			case 7: System.out.println("hai selezionato: visualizzare statistiche sulla rete\n");
+					if (!rete_vuota) mostraStatistiche();
+					else System.out.println(not_selectable);
 					break;
 			case 8: System.out.println("hai selezionato: visualizzare Degree Distribution della rete\n");
-					distribuzione();
+					if (!rete_vuota) distribuzione();
+					else System.out.println(not_selectable);
 					break;
-			case 9: System.out.println("hai selezionato: visualizzare il cammino più lungo nella rete\n");
-					System.out.println("...: "+rete.Lmax());
+			case 9: System.out.println("hai selezionato: ricerca utenti per stringa\n");
+					if (!rete_vuota) cercaUtenti();
+					else System.out.println(not_selectable);
 					break;
-			case 10: System.out.println("hai selezionato: ricerca utenti per nome / cognome\n");
-					cercaUtenti();
-					break;
-			case 11: System.out.println("hai selezionato: esporta in xml\n");
+			case 10: System.out.println("hai selezionato: esporta in xml\n");
 					esportaXML();
 					break;
-			case 12: System.out.println("Ciao ciao!"); 
+			case 11: System.out.println("Ciao ciao!"); 
 					ret=true; 
 					break;
 			default: System.out.println("il numero selezionato non esiste");
@@ -455,6 +496,5 @@ public class Interface
 		input.aspetta();
 		
 		return ret;
-	}
-	
+	}	
 }

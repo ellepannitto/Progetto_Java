@@ -99,4 +99,24 @@ public class Tastiera
 		input.useDelimiter("\\n");
 		return input.next();
 	}
+	
+	public String nextAlphabetic()
+	{
+		String stringa = "";
+		
+		boolean check = false;
+	
+		while (!check)
+		{
+			stringa = nextLine();
+			stringa = stringa.trim();
+			if(!(stringa.matches("[a-zA-Z ]+"))) 
+				System.out.println("ERRORE: Inserire un nome valido ");
+			else
+				check=true;
+		}
+		
+		return stringa;
+
+	}
 }
