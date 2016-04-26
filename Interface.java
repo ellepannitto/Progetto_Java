@@ -85,6 +85,7 @@ public class Interface
 		String nome_file="";
 		if (selezione==1)
 		{
+			System.out.println ("Inserisci il nome del file da cui caricare la rete:")
 			nome_file=input.nextLine();
 		}
 		
