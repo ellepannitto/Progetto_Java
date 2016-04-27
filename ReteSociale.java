@@ -19,7 +19,7 @@ public class ReteSociale implements Serializable
 	private int next_user_id = 0;
 	
 	private Map<Integer, Utente> persone;
-	private Map<Integer, Vector<Integer>> rete; 
+	private Map<Integer, Vector<Integer>> rete;
 	
 	private String FileSalvataggio = "";
 	
@@ -150,7 +150,6 @@ public class ReteSociale implements Serializable
 		if (already_in)
 		{
 			u=this.persone.get(id);
-			System.out.println(u);
 
 		}else{
 			throw new UserException("id "+id+" non presente nella rete sociale");
@@ -231,8 +230,9 @@ public class ReteSociale implements Serializable
 	 * */
 	public void removeUser (Utente u) throws UserException
 	{
+		
 		boolean already_in = this.persone.containsValue(u);
-
+	
 		if (!already_in)
 		{
 			throw new UserException ("elemento "+u+" non presente");
@@ -241,8 +241,9 @@ public class ReteSociale implements Serializable
 		{
 			Vector<Integer> lista_amici=this.rete.get(getId(u));
 			
-			Vector<Integer> copia_lista_amici = new Vector<Integer> (lista_amici);
+			System.out.println ("rimuovo tutti "+lista_amici);
 			
+			Vector<Integer> copia_lista_amici = new Vector<Integer> (lista_amici);
 			
 			for (Integer i: copia_lista_amici)
 			{
@@ -258,10 +259,12 @@ public class ReteSociale implements Serializable
 				}
 			}
 			
+			
 		}
 		
 		this.rete.remove(getId(u));
-		this.persone.remove(u);
+		this.persone.remove(getId(u));
+		
 		
 	}
 	
@@ -449,6 +452,7 @@ public class ReteSociale implements Serializable
 	 * @throws RelationException se non esiste una relazione di amicizia fra i due utenti
 	 * 
 	 * */
+	 
 	public void SuperRemove (Utente a, Utente b) throws UserException, RelationException
 	{
 		if (a.equals(b))
@@ -472,7 +476,15 @@ public class ReteSociale implements Serializable
 		Vector<Integer> amici_di_a = this.rete.get(getId(a));
 		Vector<Integer> amici_di_b = this.rete.get(getId(b));
 				
-		this.removeRelation(a, b);
+		try
+		{
+			this.removeRelation(a, b);
+		}
+		catch(RelationException e)
+		{
+			;
+		}
+		
 			
 		for (Integer i : amici_di_b)
 		{
