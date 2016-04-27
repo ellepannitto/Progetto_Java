@@ -38,7 +38,7 @@ public class Loader
 	 * */
 	private ReteSociale loadObject(String file_rete)
 	{
-		ReteSociale rete=null;
+		ReteSociale rete = new ReteSociale();
 		
 		try {
 			
@@ -82,7 +82,10 @@ public class Loader
 	 * */
 	private ReteSociale loadFromXML(String file_rete)
 	{
-		ReteSociale rete = null;
+		ReteSociale rete = new ReteSociale();
+		
+		Map<Integer, Utente>  mapping_utenti = new HashMap <Integer, Utente>();
+		Map<Integer, Vector<Integer>>  mapping_rete = new HashMap <Integer, Vector<Integer>>();
 		
 		try
 		{
@@ -94,10 +97,7 @@ public class Loader
 			Element radice = document.getRootElement();
 			
 			List<Element> utenti = radice.getChildren();
-			
-			Map<Integer, Utente>  mapping_utenti = new HashMap <Integer, Utente>();
-			Map<Integer, Vector<Integer>>  mapping_rete = new HashMap <Integer, Vector<Integer>>();
-			
+				
 			for(int i=0; i<utenti.size(); i++)
 			{
 				Element nodo_utente = utenti.get(i);
@@ -128,10 +128,6 @@ public class Loader
 				mapping_rete.put(id, lista_amici);
 			}
 			
-			rete = new ReteSociale();
-			
-			rete.caricaDaGrafo ( mapping_utenti, mapping_rete );
-			
 		}
 		catch(JDOMException e)
 		{
@@ -146,6 +142,7 @@ public class Loader
 			System.exit (1);
 		}
 		
+		rete.caricaDaGrafo ( mapping_utenti, mapping_rete );
 		return rete;
 		
 	}

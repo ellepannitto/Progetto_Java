@@ -150,6 +150,7 @@ public class ReteSociale implements Serializable
 		if (already_in)
 		{
 			u=this.persone.get(id);
+			System.out.println(u);
 
 		}else{
 			throw new UserException("id "+id+" non presente nella rete sociale");
@@ -277,6 +278,11 @@ public class ReteSociale implements Serializable
 	 * */
 	public void addRelation (Utente a, Utente b) throws UserException, RelationException
 	{
+		if (a.equals(b))
+		{
+			throw new UserException ("Impossibile aggiungere una relazione tra due utenti uguali.");
+		}
+		
 		boolean a_already_in = this.persone.containsValue(a);
 		boolean b_already_in = this.persone.containsValue(b);
 			
@@ -320,6 +326,11 @@ public class ReteSociale implements Serializable
 	 * */
 	public void changeRelation (Utente a, Utente b) throws UserException, RelationException
 	{
+		if (a.equals(b))
+		{
+			throw new UserException ("Impossibile gestire una relazione tra due utenti uguali.");
+		}
+		
 		boolean add = !checkRelation (a, b);
 		
 		if (add)
@@ -390,6 +401,11 @@ public class ReteSociale implements Serializable
 	 * */
 	public void removeRelation (Utente a, Utente b) throws UserException, RelationException
 	{
+		if (a.equals(b))
+		{
+			throw new UserException ("Impossibile rimuovere una relazione tra due utenti uguali.");
+		}
+		
 		boolean a_already_in = this.persone.containsValue(a);
 		boolean b_already_in = this.persone.containsValue(b);
 			
@@ -435,6 +451,11 @@ public class ReteSociale implements Serializable
 	 * */
 	public void SuperRemove (Utente a, Utente b) throws UserException, RelationException
 	{
+		if (a.equals(b))
+		{
+			throw new UserException ("Impossibile considerare una relazione tra due utenti uguali.");
+		}
+		
 		boolean a_already_in = this.persone.containsValue(a);
 		boolean b_already_in = this.persone.containsValue(b);
 			
@@ -665,10 +686,13 @@ public class ReteSociale implements Serializable
 		
 		int max=0;
 		
-		Set<Integer> chiavi = mapping_persone.keySet();
-		max = Collections.max(chiavi);
+		if (!mapping_persone.isEmpty() && !mapping_rete.isEmpty())
+		{
+			Set<Integer> chiavi = mapping_persone.keySet();
+			max = Collections.max(chiavi);
 		
-		next_user_id=max;
+			next_user_id=max;
+		}
 		
 		persone = mapping_persone;
 		rete = mapping_rete;

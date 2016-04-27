@@ -164,7 +164,7 @@ public class Interface
 		}
 		catch (UserException e)
 		{
-			System.out.println ("Utente già presente...");
+			System.out.println ("Utente già presente, "+e.getMessage());
 		}
 	}
 	
@@ -191,7 +191,7 @@ public class Interface
 		}
 		catch (UserException e)
 		{
-			System.out.println("Errore durante la rimozione dell'utente dalla rete");
+			System.out.println("Errore durante la rimozione dell'utente dalla rete, "+e.getMessage());
 			//~ e.printStackTrace();
 		}
 		
@@ -222,14 +222,15 @@ public class Interface
 		}
 		catch (UserException e)
 		{
-			System.out.println("Errore durante la selezione dell'utente");
+			System.out.println("Errore durante la selezione dell'utente, "+e.getMessage());
 			//~ e.printStackTrace();
 		}
 		catch (RelationException e)
 		{
-			System.out.println("Errore durante la modifica della relazione");
+			System.out.println("Errore durante la modifica della relazione, "+e.getMessage());
 			//~ e.printStackTrace();
 		}
+		
 	}
 	
 	/**
@@ -313,12 +314,12 @@ public class Interface
 		}
 		catch(UserException e)
 		{
-			System.out.println("Errore dutante la ricerca dell'utente.");
+			System.out.println("Errore dutante la ricerca dell'utente, "+e.getMessage());
 			//~ e.printStackTrace();
 		}
 		catch(RelationException e)
 		{
-			System.out.println("Errore dutante la modifica della relazione.");
+			System.out.println("Errore dutante la modifica della relazione, "+e.getMessage());
 			//~ e.printStackTrace();
 		}
 		
@@ -348,7 +349,7 @@ public class Interface
 		}
 		catch(UserException e)
 		{
-			System.out.println("Errore durante la selezione dell'utente.");
+			System.out.println("Errore durante la selezione dell'utente, "+e.getMessage());
 			System.out.println("Utente con id "+i+"Non presente");
 		}
 		
