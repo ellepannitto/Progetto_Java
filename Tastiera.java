@@ -110,7 +110,7 @@ public class Tastiera
 		{
 			stringa = nextLine();
 			stringa = stringa.trim();
-			if(!(stringa.matches("[a-zA-Z ]+"))) 
+			if(!(stringa.matches("[a-zA-Z\' ]+"))) 
 				System.out.println("ERRORE: Inserire un nome valido ");
 			else
 				check=true;
