@@ -671,18 +671,13 @@ public class ReteSociale implements Serializable
 	 */
 	public double Lmax () {
 		int N = getNodi();
-		return (N*(N-1))/2;
+		
+		return (N*(N-1))/2.0;
 	}
 	
 	public double density()
 	{
-		double neighbors = 0;
-		Iterator<Integer> keySetIterator = rete.keySet().iterator();
-		while (keySetIterator.hasNext()) {
-		    Integer key1 = keySetIterator.next();
-		    neighbors += rete.get(key1).size(); 
-		}
-			return neighbors / Lmax();
+		return this.getArchi() / Lmax();
 	}
 	
 	/**
