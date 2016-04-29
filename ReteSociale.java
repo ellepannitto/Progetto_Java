@@ -654,7 +654,7 @@ public class ReteSociale implements Serializable
 		    if (rete.get(key1).size() == k)
 		       	Nk++;			            
 		}
-			return Nk / getNodi();
+			return Nk / (double) getNodi();
 	}
 
 	public double avg_degree()

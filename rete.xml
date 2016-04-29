@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<ReteSociale>
+	<Utente id='0'>
+		<nome>ludovica</nome>
+		<cognome>pannitto</cognome>
+		<amici>
+			<id>1</id>
+		</amici>
+	</Utente>
+	<Utente id='1'>
+		<nome>giulia</nome>
+		<cognome>rambelli</cognome>
+		<amici>
+			<id>0</id>
+		</amici>
+	</Utente>
+	<Utente id='2'>
+		<nome>giulia</nome>
+		<cognome>mercadante</cognome>
+		<amici>
+		</amici>
+	</Utente>
+</ReteSociale>

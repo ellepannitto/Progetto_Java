@@ -134,9 +134,10 @@ public class Interface
 	 * */
 	private static void distribuzione()
 	{
+		System.out.println("Inserisci il grado di cui vuoi conoscere la distribuzione:");
 		int k=input.nextInt();
 		
-		System.out.println("...: "+rete.getDegreeDistribution(k));
+		System.out.println("Distribuzione del grado "+k+": "+rete.getDegreeDistribution(k));
 		
 	}
 	
