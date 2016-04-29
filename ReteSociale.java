@@ -9,9 +9,9 @@ import java.util.Collections;
  * 
  * 
  * @author Corradini Celestino, mat. 527813
- * @author Mercadante Giulia, mat.
+ * @author Mercadante Giulia, mat. 540938
  * @author Pannitto Ludovica , mat. 491094
- * @author Rambelli Giulia, mat.
+ * @author Rambelli Giulia, mat. 495544
  * 
  * */
 public class ReteSociale implements Serializable
@@ -682,7 +682,7 @@ public class ReteSociale implements Serializable
 		    Integer key1 = keySetIterator.next();
 		    neighbors += rete.get(key1).size(); 
 		}
-			return neighbors / (double) getNodi();
+			return neighbors / Lmax();
 	}
 	
 	/**

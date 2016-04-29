@@ -1,10 +1,10 @@
 import java.util.*;
 
 /**
- * @author Corradini Celestino, mat.
- * @author Mercadante Giulia, mat.
+ * @author Corradini Celestino, mat. 527813
+ * @author Mercadante Giulia, mat. 540938
  * @author Pannitto Ludovica , mat. 491094
- * @author Rambelli Giulia, mat.
+ * @author Rambelli Giulia, mat. 495544
  * 
  * Gestisce le operazioni di input
  * */
